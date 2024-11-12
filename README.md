@@ -1,18 +1,54 @@
-```txt
-npm install
-npm run db:apply
-npm run dev
-```
+```mermaid
+erDiagram
+    users {
+        integer id PK
+        text name
+        text googleUserId
+        integer createdAt
+        integer updatedAt
+    }
 
-```txt
-npm run deploy
-```
+    tarotSpreads {
+        integer id PK
+        text name
+        text description
+        integer positions
+        integer createdAt
+        integer updatedAt
+    }
 
-```bash
-npm run deploy
-# 初回のみ以下のように質問される。新しくプロジェクトを作成する場合は「Create a new project」を選択する
-The project you specified does not exist: "ai-tarot". Would you like to create it?
-❯ Create a new project
-# ブランチを指定する
-✔ Enter the production branch name: … main
+    tarotCards {
+        integer id PK
+        text name
+        text description
+        text uprightMeaning
+        text reversedMeaning
+        integer createdAt
+        integer updatedAt
+    }
+
+    tarotDrawHistory {
+        integer id PK
+        integer userId FK
+        integer spreadId FK
+        integer drawDate
+        integer createdAt
+        integer updatedAt
+    }
+
+    tarotDrawCards {
+        integer id PK
+        integer drawHistoryId FK
+        integer cardId FK
+        integer position
+        integer isReversed
+        integer drawOrder
+        integer createdAt
+        integer updatedAt
+    }
+
+    users ||--o{ tarotDrawHistory : "has"
+    tarotSpreads ||--o{ tarotDrawHistory : "uses"
+    tarotDrawHistory ||--o{ tarotDrawCards : "contains"
+    tarotCards ||--o{ tarotDrawCards : "includes"
 ```
