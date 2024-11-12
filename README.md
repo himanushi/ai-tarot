@@ -1,3 +1,5 @@
+https://chatgpt.com/share/67331eee-19b8-800f-893e-8ea666b326b6
+
 ```mermaid
 erDiagram
     users {
