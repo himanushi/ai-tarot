@@ -52,9 +52,8 @@ erDiagram
         integer drawHistoryId FK
         integer cardId FK
         integer drawOrder
-        float x
-        float y
         text orientation
+        boolean isReversed
         integer createdAt
         integer updatedAt
     }
@@ -76,4 +75,5 @@ erDiagram
     tarotDrawHistory ||--o{ tarotDrawCards : "contains"
     tarotCards ||--o{ tarotDrawCards : "includes"
     tarotDrawHistory ||--o{ tarotReadingResults : "produces"
+
 ```
