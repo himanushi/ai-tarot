@@ -38,14 +38,12 @@ export default defineWorkersConfig(async ({ mode }) => {
     return {
       ssr: {
         external: [
-          "@capacitor/preferences",
           "react",
           "react-dom",
           "react-router-dom",
           "@ionic/react",
           "@ionic/react-router",
           "@tanstack/react-query",
-          "@tanstack/react-query-persist-client",
         ],
       },
       plugins: [
@@ -85,11 +83,11 @@ export default defineWorkersConfig(async ({ mode }) => {
       },
     },
     plugins: [
-      pages(),
       devServer({
         adapter,
         entry: "src/index.tsx",
       }),
+      pages(),
       tsconfigPaths(),
     ],
     poolOptions: {

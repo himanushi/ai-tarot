@@ -1,4 +1,15 @@
-import { Box } from "@yamada-ui/react";
-import { Me } from "~/client/features/me/Me";
+import { Box, Button } from "@yamada-ui/react";
 
-export const HomeLayout = () => <Box>aaa</Box>;
+export const HomeLayout = () => {
+  return (
+    <Box>
+      <Button
+        onClick={() => {
+          console.log("clicked");
+        }}
+      >
+        click me
+      </Button>
+    </Box>
+  );
+};
