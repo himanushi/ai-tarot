@@ -1,5 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { UIProvider, extendTheme } from "@yamada-ui/react";
+import {
+  ColorModeScript,
+  UIProvider,
+  defaultConfig,
+  extendConfig,
+} from "@yamada-ui/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
@@ -13,12 +18,14 @@ const queryClient = new QueryClient({
   },
 });
 
-const customTheme = extendTheme()();
+const config = extendConfig({
+  initialColorMode: "dark",
+});
 
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <UIProvider theme={customTheme}>
+      <UIProvider config={config}>
         <RouterProvider router={routes} />
       </UIProvider>
     </QueryClientProvider>
@@ -27,6 +34,7 @@ const App = () => {
 
 createRoot(document.getElementById("root") as HTMLDivElement).render(
   <StrictMode>
+    {/* <ColorModeScript initialColorMode={defaultConfig.initialColorMode} /> */}
     <App />
   </StrictMode>,
 );
