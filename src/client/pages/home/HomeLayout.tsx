@@ -40,6 +40,9 @@ export const HomeLayout = () => {
       <Button onClick={onLoadingScreen}>Start screen loading</Button>
       <Button onClick={onLoadingPage}>Start page loading</Button>
       <Button onClick={onLoadingBackground}>Start background loading</Button>
+      <Box w="full" p="md" bg={["primary", "secondary"]} color="white">
+        This is Box
+      </Box>
     </Wrap>
   );
 };
