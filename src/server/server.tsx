@@ -6,6 +6,11 @@ export const server = createFactory().createHandlers((c) => {
     renderToString(
       <html lang="en">
         <head>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+            data-next-head=""
+          />
           {import.meta.env.PROD ? (
             <script type="module" src="/static/client.js" />
           ) : (
