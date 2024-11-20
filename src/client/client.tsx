@@ -21,7 +21,14 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <UIProvider config={customConfig}>
         <Flex>
-          <Flex as="section" flex={1}>
+          <Flex
+            as="section"
+            flex={1}
+            display={{
+              base: "flex",
+              lg: "none",
+            }}
+          >
             <Sidebar />
           </Flex>
           <Sidebar />
