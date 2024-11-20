@@ -1,14 +1,15 @@
-import { Box, Container } from "@yamada-ui/react";
+import { Stack, Text, VStack } from "@yamada-ui/react";
+import { Spread } from "~/client/features/spread/Spread";
 
 export const HomeLayout = () => {
   return (
-    <Box>
-      <Box w="full" p="md" bg={["primary", "secondary"]} color="white">
-        This is Box
-      </Box>
-      <Box w="full" p="md" bg={["primary", "secondary"]} color="white">
-        This is Box
-      </Box>
-    </Box>
+    <VStack>
+      <Stack>
+        <Text>Home</Text>
+      </Stack>
+      <Stack>
+        <Spread />
+      </Stack>
+    </VStack>
   );
 };
