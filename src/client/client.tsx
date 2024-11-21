@@ -6,6 +6,7 @@ import { RouterProvider } from "react-router-dom";
 import { Header } from "./features/header/Header";
 import { Sidebar } from "./features/sidebar/Sidebar";
 import { routes } from "./routes";
+import { theme } from "./theme";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,12 +16,12 @@ const queryClient = new QueryClient({
   },
 });
 
-const customConfig = extendConfig({ initialColorMode: "dark" });
+const config = extendConfig({ initialColorMode: "dark" });
 
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <UIProvider config={customConfig}>
+      <UIProvider config={config} theme={theme}>
         <Box>
           <Header />
           <Flex as="main">
