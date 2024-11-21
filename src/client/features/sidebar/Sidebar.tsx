@@ -10,10 +10,9 @@ export const Sidebar = () => {
         lg: "none",
       }}
       w="sm"
+      bgColor="amber.500"
     >
-      <Flex bgColor="amber.500">
-        <Menu />
-      </Flex>
+      <Menu />
     </Flex>
   );
 };
