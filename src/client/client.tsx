@@ -1,11 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  Box,
-  Container,
-  Flex,
-  UIProvider,
-  extendConfig,
-} from "@yamada-ui/react";
+import { Box, Flex, UIProvider, extendConfig } from "@yamada-ui/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";

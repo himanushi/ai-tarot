@@ -1,11 +1,11 @@
-import { Box, Flex, Heading, Text, VStack } from "@yamada-ui/react";
+import { Box, HStack, Heading } from "@yamada-ui/react";
 
 export const Header = () => {
   return (
     <Box as="header" bgColor="amber.500">
-      <VStack>
+      <HStack>
         <Heading>占いのゲーム</Heading>
-      </VStack>
+      </HStack>
     </Box>
   );
 };
