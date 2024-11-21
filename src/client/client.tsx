@@ -1,8 +1,15 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Container, Flex, UIProvider, extendConfig } from "@yamada-ui/react";
+import {
+  Box,
+  Container,
+  Flex,
+  UIProvider,
+  extendConfig,
+} from "@yamada-ui/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
+import { Header } from "./features/header/Header";
 import { Sidebar } from "./features/sidebar/Sidebar";
 import { routes } from "./routes";
 
@@ -20,22 +27,13 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <UIProvider config={customConfig}>
-        <Flex>
-          <Flex
-            as="section"
-            flex={1}
-            display={{
-              base: "flex",
-              lg: "none",
-            }}
-          >
+        <Box>
+          <Header />
+          <Flex as="main">
             <Sidebar />
-          </Flex>
-          <Sidebar />
-          <Flex as="main" flex={3}>
             <RouterProvider router={routes} />
           </Flex>
-        </Flex>
+        </Box>
       </UIProvider>
     </QueryClientProvider>
   );
