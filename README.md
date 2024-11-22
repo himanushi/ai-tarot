@@ -45,6 +45,10 @@ erDiagram
         integer id PK
         integer userId FK
         integer spreadId FK
+        text modelName
+        text question
+        text readingResult
+        text errorMessage
         integer createdAt
         integer updatedAt
     }
@@ -54,19 +58,7 @@ erDiagram
         integer drawHistoryId FK
         integer cardId FK
         integer drawOrder
-        text orientation
         boolean isReversed
-        integer createdAt
-        integer updatedAt
-    }
-
-    tarotReadingResults {
-        integer id PK
-        integer drawHistoryId FK
-        text modelName
-        text question
-        text readingResult
-        text errorMessage
         integer createdAt
         integer updatedAt
     }
@@ -76,6 +68,5 @@ erDiagram
     tarotSpreads ||--o{ tarotSpreadPositions : "defines"
     tarotDrawHistory ||--o{ tarotDrawCards : "contains"
     tarotCards ||--o{ tarotDrawCards : "includes"
-    tarotDrawHistory ||--o{ tarotReadingResults : "produces"
 
 ```
