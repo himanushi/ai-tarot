@@ -23,8 +23,8 @@ export const users = sqliteTable("users", {
 // tarotSpreads テーブル
 export const tarotSpreads = sqliteTable("tarot_spreads", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-  name: text("name").notNull(), // スプレッドの名前
-  description: text("description").notNull(), // スプレッドの説明
+  name: text("name").notNull(),
+  description: text("description").notNull(),
   createdAt: integer("created_at", { mode: "timestamp" })
     .default(sql`(strftime('%s', 'now'))`)
     .notNull(),
@@ -39,15 +39,15 @@ export const tarotSpreadPositions = sqliteTable("tarot_spread_positions", {
   spreadId: integer("spread_id")
     .references(() => tarotSpreads.id)
     .notNull(),
-  drawOrder: integer("draw_order").notNull(), // 描画順序
-  x: real("x").notNull(), // X座標
-  y: real("y").notNull(), // Y座標
+  drawOrder: integer("draw_order").notNull(),
+  x: real("x").notNull(),
+  y: real("y").notNull(),
   orientation: text("orientation")
     .$type<Orientation>()
     .default(Orientation.Vertical)
-    .notNull(), // 方向（縦・横）
-  description: text("description").notNull(), // 配置の説明
-  displayName: text("display_name").notNull(), // 表示名
+    .notNull(),
+  description: text("description").notNull(),
+  displayName: text("display_name").notNull(),
   createdAt: integer("created_at", { mode: "timestamp" })
     .default(sql`(strftime('%s', 'now'))`)
     .notNull(),
@@ -59,10 +59,10 @@ export const tarotSpreadPositions = sqliteTable("tarot_spread_positions", {
 // tarotCards テーブル
 export const tarotCards = sqliteTable("tarot_cards", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-  name: text("name").notNull(), // カードの名前
-  description: text("description").notNull(), // カードの説明
-  uprightMeaning: text("upright_meaning").notNull(), // 正位置の意味
-  reversedMeaning: text("reversed_meaning").notNull(), // 逆位置の意味
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  uprightMeaning: text("upright_meaning").notNull(),
+  reversedMeaning: text("reversed_meaning").notNull(),
   createdAt: integer("created_at", { mode: "timestamp" })
     .default(sql`(strftime('%s', 'now'))`)
     .notNull(),
@@ -77,8 +77,13 @@ export const tarotDrawHistory = sqliteTable("tarot_draw_history", {
   userId: integer("user_id")
     .references(() => users.id)
     .notNull(),
-  spreadId: integer("spread_id")
-    .references(() => tarotSpreads.id)
+  spreadId: integer("spread_id").references(() => tarotSpreads.id),
+  modelName: text("model_name").notNull(), // 使用したモデル名
+  question: text("question").notNull(), // 質問内容
+  readingResult: text("reading_result"), // 占い結果
+  errorMessage: text("error_message"), // エラーメッセージ
+  isArchived: integer("is_archived", { mode: "boolean" }) // アーカイブフラグ
+    .default(false)
     .notNull(),
   createdAt: integer("created_at", { mode: "timestamp" })
     .default(sql`(strftime('%s', 'now'))`)
@@ -97,32 +102,10 @@ export const tarotDrawCards = sqliteTable("tarot_draw_cards", {
   cardId: integer("card_id")
     .references(() => tarotCards.id)
     .notNull(),
-  drawOrder: integer("draw_order").notNull(), // 描画順序
-  orientation: text("orientation")
-    .$type<Orientation>()
-    .default(Orientation.Vertical)
-    .notNull(), // 方向（縦・横）
+  drawOrder: integer("draw_order").notNull(),
   isReversed: integer("is_reversed", { mode: "boolean" })
     .default(false)
-    .notNull(), // 正位置か逆位置か
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .default(sql`(strftime('%s', 'now'))`)
     .notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
-    .default(sql`(strftime('%s', 'now'))`)
-    .notNull(),
-});
-
-// tarotReadingResults テーブル
-export const tarotReadingResults = sqliteTable("tarot_reading_results", {
-  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-  drawHistoryId: integer("draw_history_id")
-    .references(() => tarotDrawHistory.id)
-    .notNull(),
-  modelName: text("model_name").notNull(), // 使用したモデル名
-  question: text("question").notNull(), // 質問
-  readingResult: text("reading_result"), // 占い結果
-  errorMessage: text("error_message"), // エラーメッセージ
   createdAt: integer("created_at", { mode: "timestamp" })
     .default(sql`(strftime('%s', 'now'))`)
     .notNull(),
