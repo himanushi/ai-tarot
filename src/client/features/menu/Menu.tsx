@@ -7,6 +7,13 @@ export const Menu = () => {
         <ListItem>占い</ListItem>
         <ListItem>履歴</ListItem>
         <ListItem>設定</ListItem>
+        <ListItem
+          onClick={() => {
+            window.open("/api/auth/login", "_self");
+          }}
+        >
+          Login
+        </ListItem>
       </List>
     </VStack>
   );
