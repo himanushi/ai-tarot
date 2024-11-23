@@ -14,6 +14,7 @@ export type Bindings = {
   DB: D1Database;
   COOKIE_SECRET: string;
   APP_URL: string;
+  OPENAI_API_KEY: string;
 };
 
 export type HonoPropsType = { Bindings: Bindings; Variables: Variables };
