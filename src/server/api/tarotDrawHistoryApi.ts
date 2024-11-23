@@ -21,7 +21,7 @@ export const createTarotDrawHistoryApi =
         return c.json({ error: "Unauthorized" }, 401);
       }
 
-      const question = c.req.query("question");
+      const { question } = c.req.valid("json");
       if (!question) {
         return c.json({ error: "text is required" }, 400);
       }
@@ -32,5 +32,7 @@ export const createTarotDrawHistoryApi =
         question,
         modelName: "gpt-4o",
       });
+
+      return c.json({ data: "ok" });
     },
   );
