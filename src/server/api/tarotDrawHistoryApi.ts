@@ -10,7 +10,7 @@ export const createTarotDrawHistoryApi =
   createFactory<HonoPropsType>().createHandlers(
     authMiddleware,
     zValidator(
-      "query",
+      "json",
       z.object({
         question: z.string(),
       }),
