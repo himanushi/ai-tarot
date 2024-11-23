@@ -1,5 +1,6 @@
 import { authCallbackApi, authLoginApi, authLogoutApi } from "./api/authApi";
 import { getMeApi, patchMeApi } from "./api/meApi";
+import { createTarotDrawHistoryApi } from "./api/tarotDrawHistoryApi";
 import { middleware } from "./middleware";
 import { server } from "./server";
 import { createApp } from "./utils/createApp";
@@ -15,6 +16,12 @@ app
 
 const _meApi = app.get("/api/me", ...getMeApi).patch("/api/me", ...patchMeApi);
 export type MeAPI = typeof _meApi;
+
+const _tarotDrawHistoryApi = app.post(
+  "/api/tarot-draw-histories",
+  ...createTarotDrawHistoryApi,
+);
+export type TarotDrawHistoryApi = typeof _tarotDrawHistoryApi;
 
 app.get("*", ...server);
 
