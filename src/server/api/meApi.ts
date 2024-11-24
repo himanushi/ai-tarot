@@ -37,8 +37,7 @@ export const patchMeApi = createFactory().createHandlers(
       .set({
         name: c.req.valid("json").name,
       })
-      .where(eq(users.id, Number(me.id)))
-      .returning({ updatedUserId: users.id });
+      .where(eq(users.id, Number(me.id)));
 
     return c.text("ok");
   },

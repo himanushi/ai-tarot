@@ -27,12 +27,15 @@ export const createTarotDrawHistoryApi =
       }
 
       const db = drizzle(c.env.DB);
-      await db.insert(tarotDrawHistory).values({
-        userId: me.id,
-        question,
-        modelName: "gpt-4o",
-      });
+      const results = await db
+        .insert(tarotDrawHistory)
+        .values({
+          userId: me.id,
+          question,
+          modelName: "gpt-4o",
+        })
+        .returning();
 
-      return c.json({ data: "ok" });
+      return c.json({ data: results[0] });
     },
   );
