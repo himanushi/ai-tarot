@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { Box, Button, Textarea, VStack } from "@yamada-ui/react";
+import { Box, Button, Text, Textarea, VStack } from "@yamada-ui/react";
 import { hc } from "hono/client";
 import { useState } from "react";
 import { clientUrl } from "~/client/utils/clientUrl";
@@ -10,16 +10,6 @@ const query = hc<TarotDrawHistoryApi>(clientUrl);
 export const Game = () => {
   const [question, setQuestion] = useState("");
 
-  const addTarotDrawHistoryMutation = useMutation({
-    mutationFn: ({ question }: { question: string }) =>
-      query.api["tarot-draw-histories"].$post({
-        json: { question },
-      }),
-    onSuccess: () => {
-      setQuestion("");
-    },
-  });
-
   return (
     <VStack>
       <Textarea
@@ -28,12 +18,19 @@ export const Game = () => {
         onChange={(e) => setQuestion(e.target.value)}
       />
       <Button
-        onClick={() => {
-          addTarotDrawHistoryMutation.mutate({ question });
+        onClick={async () => {
+          query.api["tarot-draw-histories"].$post({
+            json: { question },
+          });
         }}
       >
         送信
       </Button>
+      <VStack>
+        <Text fontSize="xl" fontWeight="bold">
+          WHEEL of FORTUNE.
+        </Text>
+      </VStack>
     </VStack>
   );
 };
