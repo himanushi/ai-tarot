@@ -30,6 +30,7 @@ const excludeFiles = [
   ".keep",
   "wrangler.toml",
   "meta",
+  ".wrangler",
 ];
 
 function directoryContents(dir, depth = 0) {
