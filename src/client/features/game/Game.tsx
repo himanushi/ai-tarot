@@ -1,5 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import { Box, Button, Text, Textarea, VStack } from "@yamada-ui/react";
+import {
+  Box,
+  Button,
+  Text,
+  Textarea,
+  VStack,
+  useAsync,
+  useAsyncCallback,
+} from "@yamada-ui/react";
 import { hc } from "hono/client";
 import { useState } from "react";
 import { clientUrl } from "~/client/utils/clientUrl";
@@ -9,6 +17,11 @@ const query = hc<TarotDrawHistoryApi>(clientUrl);
 
 export const Game = () => {
   const [question, setQuestion] = useState("");
+  const [isLoading, onClick] = useAsyncCallback(async () => {
+    await query.api["tarot-draw-histories"].$post({
+      json: { question },
+    });
+  }, []);
 
   return (
     <VStack>
@@ -17,20 +30,9 @@ export const Game = () => {
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
       />
-      <Button
-        onClick={async () => {
-          query.api["tarot-draw-histories"].$post({
-            json: { question },
-          });
-        }}
-      >
+      <Button onClick={onClick} isLoading={isLoading}>
         送信
       </Button>
-      <VStack>
-        <Text fontSize="xl" fontWeight="bold">
-          WHEEL of FORTUNE.
-        </Text>
-      </VStack>
     </VStack>
   );
 };
