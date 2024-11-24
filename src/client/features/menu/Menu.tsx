@@ -1,4 +1,9 @@
 import { List, ListItem, VStack } from "@yamada-ui/react";
+import { hc } from "hono/client";
+import { clientUrl } from "~/client/utils/clientUrl";
+import type { SeedApi } from "~/server/routes";
+
+export const client = hc<SeedApi>(clientUrl);
 
 export const Menu = () => {
   return (
@@ -13,6 +18,13 @@ export const Menu = () => {
           }}
         >
           Login
+        </ListItem>
+        <ListItem
+          onClick={() => {
+            client.api.seed.$get();
+          }}
+        >
+          Seed
         </ListItem>
       </List>
     </VStack>
