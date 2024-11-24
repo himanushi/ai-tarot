@@ -23,7 +23,7 @@ export const createTarotDrawHistoryApi =
 
       const { question } = c.req.valid("json");
       if (!question) {
-        return c.json({ error: "text is required" }, 400);
+        return c.json({ error: "question is required" }, 400);
       }
 
       const db = drizzle(c.env.DB);
