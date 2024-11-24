@@ -56,10 +56,20 @@ export const tarotSpreadPositions = sqliteTable("tarot_spread_positions", {
     .notNull(),
 });
 
+export enum TarotCardCategory {
+  MajorArcana = "major_arcana", // 大アルカナ
+  Swords = "swords", // 剣
+  Cups = "cups", // カップ
+  Wands = "wands", // 杖
+  Pentacles = "pentacles", // コイン
+}
+
 // tarotCards テーブル
 export const tarotCards = sqliteTable("tarot_cards", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
+  category: text("category").$type<TarotCardCategory>().notNull(),
+  cardNumber: integer("card_number", { mode: "number" }).notNull(),
   description: text("description").notNull(),
   uprightMeaning: text("upright_meaning").notNull(),
   reversedMeaning: text("reversed_meaning").notNull(),

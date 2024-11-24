@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "deba0cd7-cc07-450c-b414-41f2da2d6b86",
+  "id": "e1dad104-e05e-4893-844f-9b8b57ee0c2f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "tarot_cards": {
@@ -17,6 +17,20 @@
         "name": {
           "name": "name",
           "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "category": {
+          "name": "category",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "card_number": {
+          "name": "card_number",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

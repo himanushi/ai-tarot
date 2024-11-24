@@ -1,6 +1,8 @@
 CREATE TABLE `tarot_cards` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
+	`category` text NOT NULL,
+	`card_number` integer NOT NULL,
 	`description` text NOT NULL,
 	`upright_meaning` text NOT NULL,
 	`reversed_meaning` text NOT NULL,
