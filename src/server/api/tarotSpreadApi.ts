@@ -54,36 +54,52 @@ ${spreads.map((s) => `${s.id}: ${s.name} - ${s.description}`).join("\n")}
   "recommendedSpreadId": <spread_id>
 }`;
 
-    const response = await completions<{
-      recommendedSpreadId: number;
-    }>({
-      systemPrompt,
-      prompt: `質問: ${question.question}`,
-      model: "gpt-4o",
-      apiKey: c.env.OPENAI_API_KEY,
-      responseFormat: {
-        type: "json_schema",
-        json_schema: {
-          name: "recommendSpread",
-          description:
-            "Returns the most suitable tarot spread for the question",
-          schema: {
-            type: "object",
-            properties: {
-              recommendedSpreadId: { type: "integer" },
-            },
-            required: ["recommendedSpreadId"],
-            additionalProperties: false,
-          },
-          strict: true,
-        },
-      },
-    });
+    // const response = await completions<{
+    //   recommendedSpreadId: number;
+    // }>({
+    //   systemPrompt,
+    //   prompt: `質問: ${question.question}`,
+    //   model: "gpt-4o",
+    //   apiKey: c.env.OPENAI_API_KEY,
+    //   responseFormat: {
+    //     type: "json_schema",
+    //     json_schema: {
+    //       name: "recommendSpread",
+    //       description:
+    //         "Returns the most suitable tarot spread for the question",
+    //       schema: {
+    //         type: "object",
+    //         properties: {
+    //           recommendedSpreadId: { type: "integer" },
+    //         },
+    //         required: ["recommendedSpreadId"],
+    //         additionalProperties: false,
+    //       },
+    //       strict: true,
+    //     },
+    //   },
+    // });
+    const response = { recommendedSpreadId: 1 };
 
     if (!response.recommendedSpreadId) {
       return c.json({ error: "Recommended spread not found" }, 404);
     }
 
     return c.json({ data: response });
+  },
+);
+
+export const getTarotSpreadsApi = createFactory<HonoPropsType>().createHandlers(
+  authMiddleware,
+  async (c) => {
+    const me = c.get("me");
+    if (!me) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
+
+    const db = drizzle(c.env.DB);
+    const spreads = await db.select().from(tarotSpreads);
+
+    return c.json({ data: spreads });
   },
 );
