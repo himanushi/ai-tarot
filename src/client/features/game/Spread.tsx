@@ -21,17 +21,8 @@ export const Spread = () => {
         },
       });
       const body = await result.json();
-      console.log(body);
     })();
   }, [questionId]);
-
-  // const [isLoading, onClick] = useAsyncCallback(async () => {
-  //   const result = await query.api["tarot-draw-histories"].$post({
-  //     json: { question },
-  //   });
-  //   const body = await result.json();
-  //   if ("data" in body) nav(`/questions/${body.data.id}/spreads`);
-  // }, [question, nav]);
 
   return (
     <VStack>
