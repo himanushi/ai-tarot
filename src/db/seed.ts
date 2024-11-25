@@ -207,19 +207,23 @@ export const seedTarotCards: (typeof tarotCards.$inferInsert)[] = [
 
 export const seedTarotSpreads: (typeof tarotSpreads.$inferInsert)[] = [
   {
+    id: 1,
     name: "ワンオラクル",
     description: "1枚引きの占い。簡易な占いに使われる。",
   },
   {
+    id: 2,
     name: "ツーオラクル",
     description: "2枚引きの占い。選択肢の二者択一に使われる。",
   },
   {
+    id: 3,
     name: "スリーオラクル",
     description:
       "3枚引きの占い。過去、現在、未来を表す。または、選択肢の三者択一に使われる。",
   },
   {
+    id: 4,
     name: "フォーオラクル",
     description:
       "4枚引きの占い。過去、現在、未来、アドバイスを表す。または、選択肢の四者択一に使われる。",
