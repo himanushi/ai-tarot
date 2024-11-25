@@ -10,9 +10,9 @@ import { completions } from "../utils/llm";
 export const choiceSpreadApi = createFactory<HonoPropsType>().createHandlers(
   authMiddleware,
   zValidator(
-    "json",
+    "query",
     z.object({
-      questionId: z.number(),
+      questionId: z.string().transform((v) => Number.parseInt(v, 10)),
     }),
   ),
   async (c) => {
@@ -21,7 +21,7 @@ export const choiceSpreadApi = createFactory<HonoPropsType>().createHandlers(
       return c.json({ error: "Unauthorized" }, 401);
     }
 
-    const { questionId } = c.req.valid("json");
+    const { questionId } = c.req.valid("query");
     if (!questionId) {
       return c.json({ error: "question is required" }, 400);
     }
@@ -30,6 +30,9 @@ export const choiceSpreadApi = createFactory<HonoPropsType>().createHandlers(
       prompt: "おはようございます！今日の運勢は？",
       model: "gpt-4o",
       apiKey: c.env.OPENAI_API_KEY,
+      responseFormat: {
+        // ここを追記して。
+      },
     });
 
     return c.json({ data: response });
