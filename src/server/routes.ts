@@ -28,7 +28,10 @@ export type TarotDrawHistoryApi = typeof _tarotDrawHistoryApi;
 const _seedApi = app.get("/api/seed", ...insertSeedApi);
 export type SeedApi = typeof _seedApi;
 
-const _tarotSpreadsApi = app.get("/api/tarot-spreads", ...choiceSpreadApi);
+const _tarotSpreadsApi = app.get(
+  "/api/choice-tarot-spreads",
+  ...choiceSpreadApi,
+);
 export type TarotSpreadsApi = typeof _tarotSpreadsApi;
 
 app.get("*", ...server);
