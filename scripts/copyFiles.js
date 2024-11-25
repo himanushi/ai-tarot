@@ -1,5 +1,5 @@
 const description =
-  "hono, CloudFlare Pages & D1, drizzle, react を使用したアプリを開発しています。";
+  "hono, CloudFlare Pages & D1, drizzle, react を使用したタロット占いアプリを開発しています。";
 
 import fs from "node:fs";
 import path from "node:path";
