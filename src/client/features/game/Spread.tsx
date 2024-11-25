@@ -7,7 +7,7 @@ import type { TarotDrawHistoryApi } from "~/server/routes";
 
 const query = hc<TarotDrawHistoryApi>(clientUrl);
 
-export const Question = () => {
+export const Spread = () => {
   const [question, setQuestion] = useState("");
   const nav = useNavigate();
 
