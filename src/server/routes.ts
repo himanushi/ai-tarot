@@ -1,6 +1,7 @@
 import { authCallbackApi, authLoginApi, authLogoutApi } from "./api/authApi";
 import { getMeApi, patchMeApi } from "./api/meApi";
 import { insertSeedApi } from "./api/seedApi";
+import { choiceSpreadApi } from "./api/spreadApi";
 import { createTarotDrawHistoryApi } from "./api/tarotDrawHistoryApi";
 import { middleware } from "./middleware";
 import { server } from "./server";
@@ -26,6 +27,9 @@ export type TarotDrawHistoryApi = typeof _tarotDrawHistoryApi;
 
 const _seedApi = app.get("/api/seed", ...insertSeedApi);
 export type SeedApi = typeof _seedApi;
+
+const _tarotSpreadsApi = app.get("/api/tarot-spreads", ...choiceSpreadApi);
+export type TarotSpreadsApi = typeof _tarotSpreadsApi;
 
 app.get("*", ...server);
 
