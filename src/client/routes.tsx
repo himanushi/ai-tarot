@@ -2,6 +2,20 @@ import { createBrowserRouter } from "react-router-dom";
 import { QuestionLayout } from "./pages/questions/QuestionLayout";
 import { SpreadLayout } from "./pages/spreads/SpreadLayout";
 
+const idLoader = ({ params }: any) => {
+  const parsedIds = Object.keys(params)
+    .filter((key) => key.endsWith("Id"))
+    .reduce(
+      (acc: Record<string, number>, key) => {
+        acc[key] = Number.parseInt(params[key], 10);
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+
+  return parsedIds;
+};
+
 export const routes = createBrowserRouter([
   {
     path: "/",
@@ -12,7 +26,8 @@ export const routes = createBrowserRouter([
     element: <QuestionLayout />,
   },
   {
-    path: "/questions/:id/spreads",
+    path: "/questions/:questionId/spreads",
     element: <SpreadLayout />,
+    loader: idLoader,
   },
 ]);
