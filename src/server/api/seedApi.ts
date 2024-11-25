@@ -44,6 +44,7 @@ export const insertSeedApi = createFactory<HonoPropsType>().createHandlers(
 
     const db = drizzle(c.env.DB);
     await insertOrUpdate(db, tarotCards, seedTarotCards);
+    await insertOrUpdate(db, tarotSpreads, seedTarotSpreads);
 
     return c.json({ data: "ok" });
   },
