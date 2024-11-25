@@ -69,6 +69,7 @@ export const completions = async <T extends {}>({
 
     // レスポンスデータを JSON 形式で返却
     const content = response.choices[0].message.content;
+    console.log("Response:", response);
     console.log("Response content:", content);
 
     if (!content) {
