@@ -1,4 +1,4 @@
-import { List, ListItem, VStack } from "@yamada-ui/react";
+import { Button, List, VStack } from "@yamada-ui/react";
 import { hc } from "hono/client";
 import { clientUrl } from "~/client/utils/clientUrl";
 import type { SeedApi } from "~/server/routes";
@@ -7,25 +7,25 @@ export const client = hc<SeedApi>(clientUrl);
 
 export const Menu = () => {
   return (
-    <VStack as="nav" bgColor="amber.500">
+    <VStack as="nav">
       <List>
-        <ListItem>占い</ListItem>
-        <ListItem>履歴</ListItem>
-        <ListItem>設定</ListItem>
-        <ListItem
+        <Button>占い</Button>
+        <Button>履歴</Button>
+        <Button>設定</Button>
+        <Button
           onClick={() => {
             window.open("/api/auth/login", "_self");
           }}
         >
           Login
-        </ListItem>
-        <ListItem
+        </Button>
+        <Button
           onClick={() => {
             client.api.seed.$get();
           }}
         >
           Seed
-        </ListItem>
+        </Button>
       </List>
     </VStack>
   );
