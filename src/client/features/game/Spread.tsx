@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Text, VStack } from "@yamada-ui/react";
 import { hc } from "hono/client";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { clientUrl } from "~/client/utils/clientUrl";
 import type { TarotDrawHistoryApi, TarotSpreadsApi } from "~/server/routes";
@@ -42,20 +42,26 @@ export const Spread = () => {
 
   return (
     <VStack>
-      <Text>スプレッドを選択してください</Text>
-      <Text>おすすめのスプレッド</Text>
-      {recommendedSpread && (
-        <SpreadButton questionId={questionId} spread={recommendedSpread} />
+      {recommendedSpread ? (
+        <Fragment>
+          <Text>スプレッドを選択してください</Text>
+          <Text>おすすめのスプレッド</Text>
+          {recommendedSpread && (
+            <SpreadButton questionId={questionId} spread={recommendedSpread} />
+          )}
+          {spreads
+            .filter((spread) => spread.id !== recommendedSpreadId)
+            .map((spread) => (
+              <SpreadButton
+                key={spread.id}
+                questionId={questionId}
+                spread={spread}
+              />
+            ))}
+        </Fragment>
+      ) : (
+        <Text>おすすめスプレッドを選んでいます</Text>
       )}
-      {spreads
-        .filter((spread) => spread.id !== recommendedSpreadId)
-        .map((spread) => (
-          <SpreadButton
-            key={spread.id}
-            questionId={questionId}
-            spread={spread}
-          />
-        ))}
     </VStack>
   );
 };
@@ -75,7 +81,10 @@ const SpreadButton = ({
             spreadId: spread.id,
           },
         });
-        nav(`/questions/${questionId}/spreads/${spread.id}`);
+        await query.api["tarot-draw-histories"][":id"]["shuffle-deck"].$patch({
+          param: { id: questionId.toString() },
+        });
+        nav(`/questions/${questionId}/shuffle`);
       }}
     >
       {spread.name}
