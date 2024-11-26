@@ -10,11 +10,11 @@ import type { Context } from "hono";
 import { deleteCookie, setSignedCookie } from "hono/cookie";
 import { createFactory } from "hono/factory";
 import { users } from "../../db/schema";
-import type { Bindings } from "../utils/createApp";
+import type { Bindings, HonoPropsType } from "../utils/createApp";
 
-export const authLoginApi = createFactory().createHandlers(
+export const authLoginApi = createFactory<HonoPropsType>().createHandlers(
   oidcAuthMiddleware(),
-  async (c: Context<{ Bindings: Bindings }>) => {
+  async (c) => {
     const auth = await getAuth(c);
     const sub = auth?.sub;
 
@@ -55,12 +55,14 @@ export const authLoginApi = createFactory().createHandlers(
   },
 );
 
-export const authCallbackApi = createFactory().createHandlers(
+export const authCallbackApi = createFactory<HonoPropsType>().createHandlers(
   async (c) => await processOAuthCallback(c),
 );
 
-export const authLogoutApi = createFactory().createHandlers(async (c) => {
-  deleteCookie(c, "session");
-  await revokeSession(c);
-  return c.redirect("/");
-});
+export const authLogoutApi = createFactory<HonoPropsType>().createHandlers(
+  async (c) => {
+    deleteCookie(c, "session");
+    await revokeSession(c);
+    return c.redirect("/");
+  },
+);

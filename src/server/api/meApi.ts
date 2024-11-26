@@ -18,7 +18,7 @@ export const getMeApi = createFactory<HonoPropsType>().createHandlers(
   },
 );
 
-export const patchMeApi = createFactory().createHandlers(
+export const patchMeApi = createFactory<HonoPropsType>().createHandlers(
   authMiddleware,
   zValidator(
     "json",
