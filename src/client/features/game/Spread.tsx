@@ -3,10 +3,9 @@ import { hc } from "hono/client";
 import { useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { clientUrl } from "~/client/utils/clientUrl";
-import type { tarotSpreads } from "~/db/schema";
-import type { TarotSpreadsApi } from "~/server/routes";
+import type { TarotDrawHistoryApi, TarotSpreadsApi } from "~/server/routes";
 
-const query = hc<TarotSpreadsApi>(clientUrl);
+const query = hc<TarotSpreadsApi & TarotDrawHistoryApi>(clientUrl);
 
 type SpreadType = {
   id: number;
@@ -45,18 +44,41 @@ export const Spread = () => {
     <VStack>
       <Text>スプレッドを選択してください</Text>
       <Text>おすすめのスプレッド</Text>
-      {recommendedSpread && <SpreadButton spread={recommendedSpread} />}
+      {recommendedSpread && (
+        <SpreadButton questionId={questionId} spread={recommendedSpread} />
+      )}
       {spreads
         .filter((spread) => spread.id !== recommendedSpreadId)
         .map((spread) => (
-          <SpreadButton key={spread.id} spread={spread} />
+          <SpreadButton
+            key={spread.id}
+            questionId={questionId}
+            spread={spread}
+          />
         ))}
     </VStack>
   );
 };
 
-const SpreadButton = ({ spread }: { spread: SpreadType }) => {
+const SpreadButton = ({
+  questionId,
+  spread,
+}: { questionId: number; spread: SpreadType }) => {
   const nav = useNavigate();
 
-  return <Button>{spread.name}</Button>;
+  return (
+    <Button
+      onClick={async () => {
+        await query.api["tarot-draw-histories"][":id"]["spread-id"].$patch({
+          param: { id: questionId.toString() },
+          json: {
+            spreadId: spread.id,
+          },
+        });
+        nav(`/questions/${questionId}/spreads/${spread.id}`);
+      }}
+    >
+      {spread.name}
+    </Button>
+  );
 };
