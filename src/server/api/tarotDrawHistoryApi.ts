@@ -3,9 +3,10 @@ import { and, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
-import { tarotDrawHistories } from "~/db/schema";
+import { tarotDrawHistories, tarotSpreads } from "~/db/schema";
 import { authMiddleware } from "../utils/authMiddleware";
 import type { HonoPropsType } from "../utils/createApp";
+import { completions } from "../utils/llm";
 
 export const createTarotDrawHistoryApi =
   createFactory<HonoPropsType>().createHandlers(
@@ -140,12 +141,6 @@ export const fortuneTellingTarotDrawHistoryApi =
         id: z.string().transform((v) => Number.parseInt(v, 10)),
       }),
     ),
-    zValidator(
-      "json",
-      z.object({
-        spreadId: z.number(),
-      }),
-    ),
     async (c) => {
       const me = c.get("me");
       if (!me) {
@@ -153,20 +148,42 @@ export const fortuneTellingTarotDrawHistoryApi =
       }
 
       const { id } = c.req.valid("param");
-      const { spreadId } = c.req.valid("json");
 
       const db = drizzle(c.env.DB);
-      await db
-        .update(tarotDrawHistories)
-        .set({
-          spreadId: spreadId,
-        })
+      const history = await db
+        .select()
+        .from(tarotDrawHistories)
         .where(
           and(
             eq(tarotDrawHistories.id, id),
             eq(tarotDrawHistories.userId, me.id),
           ),
-        );
+        )
+        .get();
+
+      if (!history?.spreadId) {
+        return c.json({ error: "Not found" }, 404);
+      }
+
+      const spread = await db
+        .select()
+        .from(tarotSpreads)
+        .where(and(eq(tarotSpreads.id, history.spreadId)))
+        .get();
+
+      if (!history) {
+        return c.json({ error: "Not found" }, 404);
+      }
+
+      const response = await completions<string>({
+        systemPrompt: "",
+        prompt: `質問: ${history.question}`,
+        model: "gpt-4o-mini",
+        apiKey: c.env.OPENAI_API_KEY,
+        responseFormat: {
+          type: "text",
+        },
+      });
 
       return c.json({ data: "ok" });
     },
