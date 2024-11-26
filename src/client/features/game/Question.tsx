@@ -1,4 +1,11 @@
-import { Button, Textarea, VStack, useAsyncCallback } from "@yamada-ui/react";
+import {
+  Button,
+  Flex,
+  Spacer,
+  Textarea,
+  VStack,
+  useAsyncCallback,
+} from "@yamada-ui/react";
 import { hc } from "hono/client";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +27,8 @@ export const Question = () => {
   }, [question, nav]);
 
   return (
-    <VStack>
+    <Flex direction="column" h="calc(100dvh - 4rem)">
+      <Spacer flex={1} />
       <Textarea
         placeholder="聞くことを入力してください"
         value={question}
@@ -32,6 +40,6 @@ export const Question = () => {
       <Button onClick={onClick} isLoading={isLoading} disabled={!question}>
         送信
       </Button>
-    </VStack>
+    </Flex>
   );
 };
