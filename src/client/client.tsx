@@ -26,7 +26,7 @@ const queryClient = new QueryClient({
 const config = extendConfig({
   initialColorMode: "dark",
   theme: {
-    responsive: true,
+    responsive: false,
   },
   date: {
     locale: "ja",
