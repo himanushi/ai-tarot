@@ -79,6 +79,24 @@ export const patchSpreadIdTarotDrawHistoryApi =
     },
   );
 
+const shuffleDeck = (): [number, number][] => {
+  const totalCards = 78;
+  const deck: [number, number][] = [];
+
+  for (let i = 1; i <= totalCards; i++) {
+    const orientation = Math.random() < 0.5 ? 0 : 1;
+    deck.push([i, orientation]);
+  }
+
+  // Fisher-Yates Shuffle
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+
+  return deck;
+};
+
 export const shuffleDeckTarotDrawHistoryApi =
   createFactory<HonoPropsType>().createHandlers(
     authMiddleware,
@@ -97,11 +115,10 @@ export const shuffleDeckTarotDrawHistoryApi =
       const { id } = c.req.valid("param");
 
       const db = drizzle(c.env.DB);
-
       await db
         .update(tarotDrawHistories)
         .set({
-          deck: [],
+          deck: shuffleDeck(),
         })
         .where(
           and(
