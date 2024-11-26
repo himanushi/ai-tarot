@@ -91,7 +91,10 @@ export const tarotDrawHistories = sqliteTable("tarot_draw_history", {
   spreadId: integer("spread_id").references(() => tarotSpreads.id),
   modelName: text("model_name").notNull(), // 使用したモデル名
   question: text("question").notNull(), // 質問内容
-  deck: text("deck", { mode: "json" }).$type<number[]>().notNull().default([]),
+  deck: text("deck", { mode: "json" })
+    .$type<[number, number][]>()
+    .notNull()
+    .default([]),
   readingResult: text("reading_result"), // 占い結果
   errorMessage: text("error_message"), // エラーメッセージ
   isArchived: integer("is_archived", { mode: "boolean" }) // アーカイブフラグ
