@@ -1,5 +1,12 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Box, Flex, UIProvider, extendConfig } from "@yamada-ui/react";
+import {
+  Box,
+  ColorModeScript,
+  Flex,
+  ThemeSchemeScript,
+  UIProvider,
+  extendConfig,
+} from "@yamada-ui/react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
@@ -16,7 +23,15 @@ const queryClient = new QueryClient({
   },
 });
 
-const config = extendConfig({ initialColorMode: "dark" });
+const config = extendConfig({
+  initialColorMode: "dark",
+  theme: {
+    responsive: true,
+  },
+  date: {
+    locale: "ja",
+  },
+});
 
 const App = () => {
   return (
