@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "e1dad104-e05e-4893-844f-9b8b57ee0c2f",
+  "id": "107af590-ae12-44c5-ae20-34a50ff09482",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "tarot_cards": {
@@ -203,6 +203,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "deck": {
+          "name": "deck",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'[]'"
         },
         "reading_result": {
           "name": "reading_result",

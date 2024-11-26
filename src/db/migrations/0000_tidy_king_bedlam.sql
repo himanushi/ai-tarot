@@ -28,6 +28,7 @@ CREATE TABLE `tarot_draw_history` (
 	`spread_id` integer,
 	`model_name` text NOT NULL,
 	`question` text NOT NULL,
+	`deck` text DEFAULT '[]' NOT NULL,
 	`reading_result` text,
 	`error_message` text,
 	`is_archived` integer DEFAULT false NOT NULL,

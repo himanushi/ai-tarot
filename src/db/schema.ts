@@ -82,7 +82,7 @@ export const tarotCards = sqliteTable("tarot_cards", {
 });
 
 // tarotDrawHistory テーブル
-export const tarotDrawHistory = sqliteTable("tarot_draw_history", {
+export const tarotDrawHistories = sqliteTable("tarot_draw_history", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   userId: integer("user_id")
     .references(() => users.id)
@@ -90,6 +90,7 @@ export const tarotDrawHistory = sqliteTable("tarot_draw_history", {
   spreadId: integer("spread_id").references(() => tarotSpreads.id),
   modelName: text("model_name").notNull(), // 使用したモデル名
   question: text("question").notNull(), // 質問内容
+  deck: text("deck", { mode: "json" }).$type<number[]>().notNull().default([]),
   readingResult: text("reading_result"), // 占い結果
   errorMessage: text("error_message"), // エラーメッセージ
   isArchived: integer("is_archived", { mode: "boolean" }) // アーカイブフラグ
@@ -107,7 +108,7 @@ export const tarotDrawHistory = sqliteTable("tarot_draw_history", {
 export const tarotDrawCards = sqliteTable("tarot_draw_cards", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   drawHistoryId: integer("draw_history_id")
-    .references(() => tarotDrawHistory.id)
+    .references(() => tarotDrawHistories.id)
     .notNull(),
   cardId: integer("card_id")
     .references(() => tarotCards.id)
