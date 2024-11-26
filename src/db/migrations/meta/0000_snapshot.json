@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "107af590-ae12-44c5-ae20-34a50ff09482",
+  "id": "0f9534a2-dfa8-4626-aa09-2c68bd6c9821",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "tarot_cards": {
@@ -448,6 +448,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "point": {
+          "name": "point",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
         },
         "created_at": {
           "name": "created_at",

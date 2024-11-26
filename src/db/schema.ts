@@ -12,6 +12,7 @@ export const users = sqliteTable("users", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   googleUserId: text("googleUserId").unique().notNull(),
+  point: integer("point").notNull().default(0),
   createdAt: integer("created_at", { mode: "timestamp" })
     .default(sql`(strftime('%s', 'now'))`)
     .notNull(),
