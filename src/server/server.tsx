@@ -4,8 +4,20 @@ import { renderToString } from "react-dom/server";
 export const server = createFactory().createHandlers((c) => {
   return c.html(
     renderToString(
-      <html lang="en">
+      <html lang="ja">
         <head>
+          <script
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
+            dangerouslySetInnerHTML={{
+              __html: "localStorage.setItem('ui-color-mode', 'dark')",
+            }}
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            href="/static/favicon.ico"
+            data-next-head=""
+          />
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1"
