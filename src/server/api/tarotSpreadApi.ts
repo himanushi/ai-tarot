@@ -3,7 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
-import { tarotDrawHistory, tarotSpreads } from "~/db/schema";
+import { tarotDrawHistories, tarotSpreads } from "~/db/schema";
 import { authMiddleware } from "../utils/authMiddleware";
 import type { HonoPropsType } from "../utils/createApp";
 import { completions } from "../utils/llm";
@@ -30,11 +30,11 @@ export const choiceSpreadApi = createFactory<HonoPropsType>().createHandlers(
     const db = drizzle(c.env.DB);
     const question = await db
       .select()
-      .from(tarotDrawHistory)
+      .from(tarotDrawHistories)
       .where(
         and(
-          eq(tarotDrawHistory.userId, me.id),
-          eq(tarotDrawHistory.id, questionId),
+          eq(tarotDrawHistories.userId, me.id),
+          eq(tarotDrawHistories.id, questionId),
         ),
       )
       .limit(1)
@@ -42,6 +42,10 @@ export const choiceSpreadApi = createFactory<HonoPropsType>().createHandlers(
 
     if (!question) {
       return c.json({ error: "question not found" }, 404);
+    }
+
+    if (question.spreadId) {
+      return c.json({ data: { recommendedSpreadId: question.spreadId } });
     }
 
     const spreads = await db.select().from(tarotSpreads);
