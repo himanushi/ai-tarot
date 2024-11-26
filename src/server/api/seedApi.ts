@@ -1,8 +1,12 @@
 import { getTableColumns, sql } from "drizzle-orm";
 import { type DrizzleD1Database, drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
-import { tarotCards, tarotSpreads } from "~/db/schema";
-import { seedTarotCards, seedTarotSpreads } from "~/db/seed";
+import { tarotCards, tarotSpreadPositions, tarotSpreads } from "~/db/schema";
+import {
+  seedTarotCards,
+  seedTarotSpreadPositions,
+  seedTarotSpreads,
+} from "~/db/seed";
 import { authMiddleware } from "../utils/authMiddleware";
 import type { HonoPropsType } from "../utils/createApp";
 
@@ -45,6 +49,7 @@ export const insertSeedApi = createFactory<HonoPropsType>().createHandlers(
     const db = drizzle(c.env.DB);
     await insertOrUpdate(db, tarotCards, seedTarotCards);
     await insertOrUpdate(db, tarotSpreads, seedTarotSpreads);
+    await insertOrUpdate(db, tarotSpreadPositions, seedTarotSpreadPositions);
 
     return c.json({ data: "ok" });
   },
