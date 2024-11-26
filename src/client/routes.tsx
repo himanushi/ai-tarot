@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { QuestionLayout } from "./pages/questions/QuestionLayout";
+import { ShuffleLayout } from "./pages/shuffle/ShuffleLayout";
 import { SpreadLayout } from "./pages/spreads/SpreadLayout";
 
 const idLoader = ({ params }: any) => {
@@ -28,6 +29,11 @@ export const routes = createBrowserRouter([
   {
     path: "/questions/:questionId/spreads",
     element: <SpreadLayout />,
+    loader: idLoader,
+  },
+  {
+    path: "/questions/:questionId/shuffle",
+    element: <ShuffleLayout />,
     loader: idLoader,
   },
 ]);

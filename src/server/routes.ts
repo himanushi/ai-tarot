@@ -4,6 +4,7 @@ import { insertSeedApi } from "./api/seedApi";
 import {
   createTarotDrawHistoryApi,
   patchSpreadIdTarotDrawHistoryApi,
+  shuffleDeckTarotDrawHistoryApi,
 } from "./api/tarotDrawHistoryApi";
 import { choiceSpreadApi, getTarotSpreadsApi } from "./api/tarotSpreadApi";
 import { middleware } from "./middleware";
@@ -27,6 +28,10 @@ const _tarotDrawHistoryApi = app
   .patch(
     "/api/tarot-draw-histories/:id/spread-id",
     ...patchSpreadIdTarotDrawHistoryApi,
+  )
+  .patch(
+    "/api/tarot-draw-histories/:id/shuffle-deck",
+    ...shuffleDeckTarotDrawHistoryApi,
   );
 export type TarotDrawHistoryApi = typeof _tarotDrawHistoryApi;
 
