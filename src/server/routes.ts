@@ -4,6 +4,7 @@ import { insertSeedApi } from "./api/seedApi";
 import {
   createTarotDrawHistoryApi,
   dealCardsTarotDrawHistoryApi,
+  fortuneTellingTarotDrawHistoryApi,
   getTarotDrawHistoryApi,
   patchSpreadIdTarotDrawHistoryApi,
   shuffleDeckTarotDrawHistoryApi,
@@ -39,6 +40,10 @@ const _tarotDrawHistoryApi = app
   .post(
     "/api/tarot-draw-histories/:id/deal-cards",
     ...dealCardsTarotDrawHistoryApi,
+  )
+  .get(
+    "/api/tarot-draw-histories/:id/fortune-telling",
+    ...fortuneTellingTarotDrawHistoryApi,
   );
 export type TarotDrawHistoryApi = typeof _tarotDrawHistoryApi;
 

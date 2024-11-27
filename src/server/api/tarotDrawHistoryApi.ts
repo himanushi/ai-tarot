@@ -4,6 +4,8 @@ import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
 import {
+  TarotCardCategory,
+  tarotCards,
   tarotDrawHistories,
   tarotSpreadPositions,
   tarotSpreads,
@@ -240,6 +242,14 @@ export const dealCardsTarotDrawHistoryApi =
     },
   );
 
+const categoryNames = {
+  [TarotCardCategory.MajorArcana]: "大アルカナ",
+  [TarotCardCategory.Swords]: "剣",
+  [TarotCardCategory.Cups]: "カップ",
+  [TarotCardCategory.Wands]: "杖",
+  [TarotCardCategory.Pentacles]: "コイン",
+};
+
 export const fortuneTellingTarotDrawHistoryApi =
   createFactory<HonoPropsType>().createHandlers(
     authMiddleware,
@@ -273,6 +283,8 @@ export const fortuneTellingTarotDrawHistoryApi =
         return c.json({ error: "Not found: spreadId" }, 404);
       }
 
+      const cards = await db.select().from(tarotCards);
+
       const spread = await db
         .select()
         .from(tarotSpreads)
@@ -289,12 +301,47 @@ export const fortuneTellingTarotDrawHistoryApi =
         .where(eq(tarotSpreadPositions.spreadId, history.spreadId))
         .orderBy(asc(tarotSpreadPositions.drawOrder));
 
-      const drawCards = positions.map((_, index) => ({
-        drawOrder: index,
-        drawHistoryId: history.id,
-        cardId: history.deck[index + 6][0],
-        isReversed: !!history.deck[index + 6][1],
-      }));
+      const systemPrompt = `あなたはタロット占い師です。以下のスプレッドを考慮して質問に対する回答を200文字程度で返してください。スプレッド配置のx,yは左上が(0,0)です。
+        スプレッド: ${spread.name}(${spread.description})
+        カード配置: ${positions
+          .map((p) => {
+            const currentCard = cards.find(
+              (c) => c.id === history.dealDeck[p.drawOrder][0],
+            );
+            const orientation = history.dealDeck[p.drawOrder][1];
+            return `[スプレッド配置番号: ${p.drawOrder + 1}, 配置(x:${p.x}, y:${p.y}), 位置の意味: ${
+              p.description
+            }], [引いたカード: ${`${categoryNames[currentCard?.category as TarotCardCategory]}の${currentCard?.name}`}(${
+              orientation ? "正位置" : "逆位置"
+            }), カードの意味: ${orientation ? `正位置では、${currentCard?.uprightMeaning}` : `逆位置では、${currentCard?.reversedMeaning}`}]`;
+          })
+          .join("\n")}
+        `;
+
+      const response = await completions({
+        systemPrompt,
+        prompt: `質問: ${history.question}`,
+        model: "gpt-4o-mini",
+        apiKey: c.env.OPENAI_API_KEY,
+        responseFormat: {
+          type: "text",
+        },
+      });
+
+      console.log("systemPrompt", systemPrompt);
+      console.log("response", response);
+
+      await db
+        .update(tarotDrawHistories)
+        .set({
+          readingResult: response,
+        })
+        .where(
+          and(
+            eq(tarotDrawHistories.id, id),
+            eq(tarotDrawHistories.userId, me.id),
+          ),
+        );
 
       return c.json({ data: "ok" });
     },
