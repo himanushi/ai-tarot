@@ -27,6 +27,7 @@ export const Shuffle = () => {
   const { questionId } = useLoaderData() as { questionId: number };
   const notice = useNotice({ limit: 3 });
   const [isLoading, setIsLoading] = useState(false);
+  const nav = useNavigate();
 
   return (
     <Flex h="calc(100dvh - 4em)" direction="column" gap="3">
@@ -45,7 +46,19 @@ export const Shuffle = () => {
       >
         シャッフル
       </Button>
-      <Button disabled={isLoading}>占う</Button>
+      <Button
+        disabled={isLoading}
+        onClick={async () => {
+          setIsLoading(true);
+          await query.api["tarot-draw-histories"][":id"]["deal-cards"].$post({
+            param: { id: questionId.toString() },
+          });
+          setIsLoading(false);
+          nav(`/questions/${questionId}/fortune-telling`);
+        }}
+      >
+        次へ
+      </Button>
     </Flex>
   );
 };
