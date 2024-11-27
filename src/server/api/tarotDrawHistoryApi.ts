@@ -4,7 +4,6 @@ import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
 import {
-  tarotDrawCards,
   tarotDrawHistories,
   tarotSpreadPositions,
   tarotSpreads,
@@ -219,19 +218,23 @@ export const dealCardsTarotDrawHistoryApi =
         .where(eq(tarotSpreadPositions.spreadId, history.spreadId))
         .orderBy(asc(tarotSpreadPositions.drawOrder));
 
-      const drawCards = positions.map((_, index) => ({
-        drawOrder: index,
-        drawHistoryId: history.id,
-        cardId: history.deck[index + 6][0],
-        isReversed: !!history.deck[index + 6][1],
-      }));
-
-      await db.batch([
-        db
-          .delete(tarotDrawCards)
-          .where(eq(tarotDrawCards.drawHistoryId, history.id)),
-        db.insert(tarotDrawCards).values(drawCards),
+      const deck = history.deck;
+      const dealDeck: [number, number][] = positions.map((_, index) => [
+        deck[index + 6][0],
+        deck[index + 6][1],
       ]);
+
+      await db
+        .update(tarotDrawHistories)
+        .set({
+          dealDeck,
+        })
+        .where(
+          and(
+            eq(tarotDrawHistories.id, id),
+            eq(tarotDrawHistories.userId, me.id),
+          ),
+        );
 
       return c.json({ data: "ok" });
     },
@@ -292,13 +295,6 @@ export const fortuneTellingTarotDrawHistoryApi =
         cardId: history.deck[index + 6][0],
         isReversed: !!history.deck[index + 6][1],
       }));
-
-      await db.batch([
-        db
-          .delete(tarotDrawCards)
-          .where(eq(tarotDrawCards.drawHistoryId, history.id)),
-        db.insert(tarotDrawCards).values(drawCards),
-      ]);
 
       return c.json({ data: "ok" });
     },
