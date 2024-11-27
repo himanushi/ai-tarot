@@ -95,30 +95,13 @@ export const tarotDrawHistories = sqliteTable("tarot_draw_history", {
     .$type<[number, number][]>()
     .notNull()
     .default([]),
+  dealDeck: text("deal_deck", { mode: "json" })
+    .$type<[number, number][]>()
+    .notNull()
+    .default([]),
   readingResult: text("reading_result"), // 占い結果
   errorMessage: text("error_message"), // エラーメッセージ
   isArchived: integer("is_archived", { mode: "boolean" }) // アーカイブフラグ
-    .default(false)
-    .notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .default(sql`(strftime('%s', 'now'))`)
-    .notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
-    .default(sql`(strftime('%s', 'now'))`)
-    .notNull(),
-});
-
-// tarotDrawCards テーブル
-export const tarotDrawCards = sqliteTable("tarot_draw_cards", {
-  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-  drawHistoryId: integer("draw_history_id")
-    .references(() => tarotDrawHistories.id)
-    .notNull(),
-  cardId: integer("card_id")
-    .references(() => tarotCards.id)
-    .notNull(),
-  drawOrder: integer("draw_order").notNull(),
-  isReversed: integer("is_reversed", { mode: "boolean" })
     .default(false)
     .notNull(),
   createdAt: integer("created_at", { mode: "timestamp" })

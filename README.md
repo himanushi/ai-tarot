@@ -1,72 +1,63 @@
 ```mermaid
 erDiagram
-    users {
-        integer id PK "Primary Key (Auto Increment)"
-        text name "User Name"
-        text googleUserId "Unique Google User ID"
-        integer createdAt "Creation Timestamp"
-        integer updatedAt "Update Timestamp"
+    USERS {
+        integer id PK "Primary Key, Auto Increment"
+        text name "User's name"
+        text googleUserId "Google User ID, unique"
+        integer point "User points, default 0"
+        integer createdAt "Creation timestamp"
+        integer updatedAt "Update timestamp"
     }
 
-    tarotSpreads {
-        integer id PK "Primary Key (Auto Increment)"
-        text name "Spread Name"
-        text description "Spread Description"
-        integer createdAt "Creation Timestamp"
-        integer updatedAt "Update Timestamp"
+    TAROT_SPREADS {
+        integer id PK "Primary Key, Auto Increment"
+        text name "Spread name"
+        text description "Spread description"
+        integer createdAt "Creation timestamp"
+        integer updatedAt "Update timestamp"
     }
 
-    tarotSpreadPositions {
-        integer id PK "Primary Key (Auto Increment)"
-        integer spreadId FK "Foreign Key to tarotSpreads"
-        integer drawOrder "Order of Draw"
-        real x "X Position"
-        real y "Y Position"
+    TAROT_SPREAD_POSITIONS {
+        integer id PK "Primary Key, Auto Increment"
+        integer spreadId FK "Foreign Key to TAROT_SPREADS"
+        integer drawOrder "Order in which the card is drawn"
+        real x "X coordinate of the position"
+        real y "Y coordinate of the position"
         text orientation "Orientation (vertical/horizontal)"
-        text description "Position Description"
-        text displayName "Display Name"
-        integer createdAt "Creation Timestamp"
-        integer updatedAt "Update Timestamp"
+        text description "Position description"
+        text displayName "Display name of the position"
+        integer createdAt "Creation timestamp"
+        integer updatedAt "Update timestamp"
     }
 
-    tarotCards {
-        integer id PK "Primary Key (Auto Increment)"
-        text name "Card Name"
-        text description "Card Description"
-        text uprightMeaning "Meaning in Upright Position"
-        text reversedMeaning "Meaning in Reversed Position"
-        integer createdAt "Creation Timestamp"
-        integer updatedAt "Update Timestamp"
+    TAROT_CARDS {
+        integer id PK "Primary Key, Auto Increment"
+        text name "Card name"
+        text category "Card category (e.g., Major Arcana)"
+        integer cardNumber "Card number"
+        text description "Card description"
+        text uprightMeaning "Meaning when upright"
+        text reversedMeaning "Meaning when reversed"
+        integer createdAt "Creation timestamp"
+        integer updatedAt "Update timestamp"
     }
 
-    tarotDrawHistory {
-        integer id PK "Primary Key (Auto Increment)"
-        integer userId FK "Foreign Key to users"
-        integer spreadId FK "Foreign Key to tarotSpreads"
-        text modelName "Model Used for Reading"
-        text question "User's Question"
-        text readingResult "Result of Reading"
-        text errorMessage "Error Message (if any)"
-        integer isArchived "Flag for Archived Status (boolean)"
-        integer createdAt "Creation Timestamp"
-        integer updatedAt "Update Timestamp"
+    TAROT_DRAW_HISTORIES {
+        integer id PK "Primary Key, Auto Increment"
+        integer userId FK "Foreign Key to USERS"
+        integer spreadId FK "Foreign Key to TAROT_SPREADS"
+        text modelName "Model name used for the draw"
+        text question "Question for the tarot reading"
+        text deck "Deck of cards, JSON format"
+        text dealDeck "Dealt deck of cards, JSON format"
+        text readingResult "Result of the reading"
+        text errorMessage "Error message if any"
+        integer isArchived "Is archived, boolean, default false"
+        integer createdAt "Creation timestamp"
+        integer updatedAt "Update timestamp"
     }
 
-    tarotDrawCards {
-        integer id PK "Primary Key (Auto Increment)"
-        integer drawHistoryId FK "Foreign Key to tarotDrawHistory"
-        integer cardId FK "Foreign Key to tarotCards"
-        integer drawOrder "Order of Draw"
-        integer isReversed "Flag for Reversed Card (boolean)"
-        integer createdAt "Creation Timestamp"
-        integer updatedAt "Update Timestamp"
-    }
-
-    %% Relationships
-    users ||--o{ tarotDrawHistory : "has"
-    tarotSpreads ||--o{ tarotSpreadPositions : "defines"
-    tarotSpreads ||--o{ tarotDrawHistory : "used in"
-    tarotDrawHistory ||--o{ tarotDrawCards : "includes"
-    tarotCards ||--o{ tarotDrawCards : "referenced by"
-
+    USERS ||--o{ TAROT_DRAW_HISTORIES : "has"
+    TAROT_SPREADS ||--o{ TAROT_SPREAD_POSITIONS : "has"
+    TAROT_SPREADS ||--o{ TAROT_DRAW_HISTORIES : "used in"
 ```
