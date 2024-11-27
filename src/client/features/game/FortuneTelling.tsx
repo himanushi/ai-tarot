@@ -1,6 +1,6 @@
 import { Button, Flex, Spacer, Text } from "@yamada-ui/react";
 import { hc } from "hono/client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { clientUrl } from "~/client/utils/clientUrl";
 import type { TarotDrawHistoryApi } from "~/server/routes";
@@ -26,7 +26,7 @@ export const FortuneTelling = () => {
   const [history, setHistory] = useState<History>();
   const nav = useNavigate();
 
-  const load = async () => {
+  const load = useCallback(async () => {
     const result = await query.api["tarot-draw-histories"][":id"].$get({
       param: { id: questionId.toString() },
     });
@@ -34,11 +34,11 @@ export const FortuneTelling = () => {
     if ("data" in body) {
       setHistory(body.data);
     }
-  };
+  }, [questionId]);
 
   useEffect(() => {
     load();
-  });
+  }, [load]);
 
   return (
     <Flex direction="column" h="calc(100dvh - 4rem)">
