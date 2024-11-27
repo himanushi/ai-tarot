@@ -10,18 +10,6 @@ CREATE TABLE `tarot_cards` (
 	`updated_at` integer DEFAULT (strftime('%s', 'now')) NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE `tarot_draw_cards` (
-	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`draw_history_id` integer NOT NULL,
-	`card_id` integer NOT NULL,
-	`draw_order` integer NOT NULL,
-	`is_reversed` integer DEFAULT false NOT NULL,
-	`created_at` integer DEFAULT (strftime('%s', 'now')) NOT NULL,
-	`updated_at` integer DEFAULT (strftime('%s', 'now')) NOT NULL,
-	FOREIGN KEY (`draw_history_id`) REFERENCES `tarot_draw_history`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`card_id`) REFERENCES `tarot_cards`(`id`) ON UPDATE no action ON DELETE no action
-);
---> statement-breakpoint
 CREATE TABLE `tarot_draw_history` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`user_id` integer NOT NULL,
@@ -29,6 +17,7 @@ CREATE TABLE `tarot_draw_history` (
 	`model_name` text NOT NULL,
 	`question` text NOT NULL,
 	`deck` text DEFAULT '[]' NOT NULL,
+	`deal_deck` text DEFAULT '[]' NOT NULL,
 	`reading_result` text,
 	`error_message` text,
 	`is_archived` integer DEFAULT false NOT NULL,
