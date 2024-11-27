@@ -5,7 +5,7 @@ import type {
   ResponseFormatText,
 } from "openai/resources/index.mjs";
 
-export const completions = async <T extends {}>({
+export const completions = async ({
   systemPrompt,
   prompt,
   model = "gpt-4o",
@@ -20,12 +20,14 @@ export const completions = async <T extends {}>({
     | ResponseFormatText
     | ResponseFormatJSONObject
     | ResponseFormatJSONSchema;
-}): Promise<T> => {
+}): Promise<string> => {
   const client = new OpenAI({
     apiKey,
   });
 
   try {
+    console.log("systemPrompt", systemPrompt);
+    console.log("prompt", prompt);
     const response = await client.chat.completions.create({
       model,
       messages: [
@@ -41,8 +43,7 @@ export const completions = async <T extends {}>({
       throw new Error("Response content is empty or undefined");
     }
 
-    const jsonResponse = JSON.parse(content);
-    return jsonResponse;
+    return content;
   } catch (error: any) {
     console.error("Error in OpenAI API call:", error.message || error);
     throw new Error(
