@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
+import { FortuneTellingLayout } from "./pages/questions/FortuneTellingLayout";
 import { QuestionLayout } from "./pages/questions/QuestionLayout";
-import { ShuffleLayout } from "./pages/shuffle/ShuffleLayout";
-import { SpreadLayout } from "./pages/spreads/SpreadLayout";
+import { ShuffleLayout } from "./pages/questions/ShuffleLayout";
+import { SpreadLayout } from "./pages/questions/SpreadLayout";
 
 const idLoader = ({ params }: any) => {
   const parsedIds = Object.keys(params)
@@ -34,6 +35,11 @@ export const routes = createBrowserRouter([
   {
     path: "/questions/:questionId/shuffle",
     element: <ShuffleLayout />,
+    loader: idLoader,
+  },
+  {
+    path: "/questions/:questionId/fortune-telling",
+    element: <FortuneTellingLayout />,
     loader: idLoader,
   },
 ]);

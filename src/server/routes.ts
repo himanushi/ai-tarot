@@ -3,6 +3,8 @@ import { getMeApi, patchMeApi } from "./api/meApi";
 import { insertSeedApi } from "./api/seedApi";
 import {
   createTarotDrawHistoryApi,
+  dealCardsTarotDrawHistoryApi,
+  getTarotDrawHistoryApi,
   patchSpreadIdTarotDrawHistoryApi,
   shuffleDeckTarotDrawHistoryApi,
 } from "./api/tarotDrawHistoryApi";
@@ -24,6 +26,7 @@ const _meApi = app.get("/api/me", ...getMeApi).patch("/api/me", ...patchMeApi);
 export type MeAPI = typeof _meApi;
 
 const _tarotDrawHistoryApi = app
+  .get("/api/tarot-draw-histories/:id", ...getTarotDrawHistoryApi)
   .post("/api/tarot-draw-histories", ...createTarotDrawHistoryApi)
   .patch(
     "/api/tarot-draw-histories/:id/spread-id",
@@ -32,6 +35,10 @@ const _tarotDrawHistoryApi = app
   .patch(
     "/api/tarot-draw-histories/:id/shuffle-deck",
     ...shuffleDeckTarotDrawHistoryApi,
+  )
+  .post(
+    "/api/tarot-draw-histories/:id/deal-cards",
+    ...dealCardsTarotDrawHistoryApi,
   );
 export type TarotDrawHistoryApi = typeof _tarotDrawHistoryApi;
 

@@ -1,12 +1,50 @@
 import { zValidator } from "@hono/zod-validator";
-import { and, eq } from "drizzle-orm";
+import { and, asc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
-import { tarotDrawHistories, tarotSpreads } from "~/db/schema";
+import {
+  tarotDrawCards,
+  tarotDrawHistories,
+  tarotSpreadPositions,
+  tarotSpreads,
+} from "~/db/schema";
 import { authMiddleware } from "../utils/authMiddleware";
 import type { HonoPropsType } from "../utils/createApp";
 import { completions } from "../utils/llm";
+
+export const getTarotDrawHistoryApi =
+  createFactory<HonoPropsType>().createHandlers(
+    authMiddleware,
+    zValidator(
+      "param",
+      z.object({
+        id: z.string().transform((v) => Number.parseInt(v, 10)),
+      }),
+    ),
+    async (c) => {
+      const me = c.get("me");
+      if (!me) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      const { id } = c.req.valid("param");
+
+      const db = drizzle(c.env.DB);
+      const history = await db
+        .select()
+        .from(tarotDrawHistories)
+        .where(
+          and(
+            eq(tarotDrawHistories.id, id),
+            eq(tarotDrawHistories.userId, me.id),
+          ),
+        )
+        .get();
+
+      return c.json({ data: history });
+    },
+  );
 
 export const createTarotDrawHistoryApi =
   createFactory<HonoPropsType>().createHandlers(
@@ -132,6 +170,73 @@ export const shuffleDeckTarotDrawHistoryApi =
     },
   );
 
+export const dealCardsTarotDrawHistoryApi =
+  createFactory<HonoPropsType>().createHandlers(
+    authMiddleware,
+    zValidator(
+      "param",
+      z.object({
+        id: z.string().transform((v) => Number.parseInt(v, 10)),
+      }),
+    ),
+    async (c) => {
+      const me = c.get("me");
+      if (!me) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      const { id } = c.req.valid("param");
+
+      const db = drizzle(c.env.DB);
+      const history = await db
+        .select()
+        .from(tarotDrawHistories)
+        .where(
+          and(
+            eq(tarotDrawHistories.id, id),
+            eq(tarotDrawHistories.userId, me.id),
+          ),
+        )
+        .get();
+
+      if (!history?.spreadId) {
+        return c.json({ error: "Not found: spreadId" }, 404);
+      }
+
+      const spread = await db
+        .select()
+        .from(tarotSpreads)
+        .where(and(eq(tarotSpreads.id, history.spreadId)))
+        .get();
+
+      if (!spread) {
+        return c.json({ error: "Not found: spread" }, 404);
+      }
+
+      const positions = await db
+        .select()
+        .from(tarotSpreadPositions)
+        .where(eq(tarotSpreadPositions.spreadId, history.spreadId))
+        .orderBy(asc(tarotSpreadPositions.drawOrder));
+
+      const drawCards = positions.map((_, index) => ({
+        drawOrder: index,
+        drawHistoryId: history.id,
+        cardId: history.deck[index + 6][0],
+        isReversed: !!history.deck[index + 6][1],
+      }));
+
+      await db.batch([
+        db
+          .delete(tarotDrawCards)
+          .where(eq(tarotDrawCards.drawHistoryId, history.id)),
+        db.insert(tarotDrawCards).values(drawCards),
+      ]);
+
+      return c.json({ data: "ok" });
+    },
+  );
+
 export const fortuneTellingTarotDrawHistoryApi =
   createFactory<HonoPropsType>().createHandlers(
     authMiddleware,
@@ -162,7 +267,7 @@ export const fortuneTellingTarotDrawHistoryApi =
         .get();
 
       if (!history?.spreadId) {
-        return c.json({ error: "Not found" }, 404);
+        return c.json({ error: "Not found: spreadId" }, 404);
       }
 
       const spread = await db
@@ -171,19 +276,29 @@ export const fortuneTellingTarotDrawHistoryApi =
         .where(and(eq(tarotSpreads.id, history.spreadId)))
         .get();
 
-      if (!history) {
-        return c.json({ error: "Not found" }, 404);
+      if (!spread) {
+        return c.json({ error: "Not found: spread" }, 404);
       }
 
-      const response = await completions<string>({
-        systemPrompt: "",
-        prompt: `質問: ${history.question}`,
-        model: "gpt-4o-mini",
-        apiKey: c.env.OPENAI_API_KEY,
-        responseFormat: {
-          type: "text",
-        },
-      });
+      const positions = await db
+        .select()
+        .from(tarotSpreadPositions)
+        .where(eq(tarotSpreadPositions.spreadId, history.spreadId))
+        .orderBy(asc(tarotSpreadPositions.drawOrder));
+
+      const drawCards = positions.map((_, index) => ({
+        drawOrder: index,
+        drawHistoryId: history.id,
+        cardId: history.deck[index + 6][0],
+        isReversed: !!history.deck[index + 6][1],
+      }));
+
+      await db.batch([
+        db
+          .delete(tarotDrawCards)
+          .where(eq(tarotDrawCards.drawHistoryId, history.id)),
+        db.insert(tarotDrawCards).values(drawCards),
+      ]);
 
       return c.json({ data: "ok" });
     },
