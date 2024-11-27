@@ -24,6 +24,7 @@ type History = {
 export const FortuneTelling = () => {
   const { questionId } = useLoaderData() as { questionId: number };
   const [history, setHistory] = useState<History>();
+  const [isLoading, setIsLoading] = useState(false);
   const nav = useNavigate();
 
   const load = useCallback(async () => {
@@ -44,13 +45,23 @@ export const FortuneTelling = () => {
     <Flex direction="column" h="calc(100dvh - 4rem)">
       <Spacer flex={1} />
       <Button
+        disabled={isLoading}
+        isLoading={isLoading}
         onClick={async () => {
+          setIsLoading(true);
+          await query.api["tarot-draw-histories"][":id"][
+            "fortune-telling"
+          ].$get({
+            param: { id: questionId.toString() },
+          });
           await load();
+          setIsLoading(false);
         }}
       >
         占う
       </Button>
       <Text>{history?.question}</Text>
+      <Text>{history?.readingResult}</Text>
     </Flex>
   );
 };
