@@ -37,13 +37,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <UIProvider config={config} theme={theme}>
-        <Box>
-          <Header />
-          <Flex as="main">
-            <Sidebar />
-            <RouterProvider router={routes} />
-          </Flex>
-        </Box>
+        <RouterProvider router={routes} />
       </UIProvider>
     </QueryClientProvider>
   );
