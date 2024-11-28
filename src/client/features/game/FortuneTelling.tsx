@@ -11,7 +11,7 @@ import {
 } from "@yamada-ui/react";
 import { hc } from "hono/client";
 import { use } from "hono/jsx";
-import { useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { TarotCard } from "~/client/components/TarotCard";
 import { clientUrl } from "~/client/utils/clientUrl";
@@ -116,6 +116,7 @@ const getSpreadBounds = (
     height: maxY - minY + 1, // 必要な行数
   };
 };
+
 const Spreads = ({ history }: { history: History | undefined }) => {
   const [spread, setSpread] = useState<{
     spread?: {
@@ -188,33 +189,48 @@ const Spreads = ({ history }: { history: History | undefined }) => {
   const bounds = getSpreadBounds(spread.positions);
 
   return (
-    <Flex flex={1} direction="column">
+    <Flex
+      flex={1}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+    >
       <Heading>スプレッド</Heading>
-      <Flex flex={1} direction="column">
+      <Grid
+        templateColumns={`repeat(${bounds.width}, minmax(0, 1fr))`}
+        templateRows={`repeat(${bounds.height}, auto)`}
+        gap="10px"
+        maxWidth="90vw"
+        maxHeight="90vh"
+        width="100%"
+        height="auto"
+        padding="20px"
+      >
         {spread.positions.map((position, index) => {
           const card = cards.find((c) => c.id === history.dealDeck[index][0]);
 
           if (!card) {
-            return <Box key={position.id} />;
+            return <Fragment key={position.id} />;
           }
 
           return (
             <GridItem
               key={position.id}
-              gridColumn={position.x - bounds.minX + 1}
-              gridRow={position.y - bounds.minY + 1}
+              colStart={position.x - bounds.minX + 1}
+              rowStart={position.y - bounds.minY + 1}
             >
               <TarotCard
-                category={card?.category}
-                cardNumber={card?.cardNumber}
+                w="100%"
+                maxW={200}
+                category={card.category}
+                cardNumber={card.cardNumber}
                 orientation={position.orientation}
                 isReversed={history.dealDeck[index][1] === 0}
               />
-              <Text textAlign="center">{position.displayName}</Text>
             </GridItem>
           );
         })}
-      </Flex>
+      </Grid>
     </Flex>
   );
 };
