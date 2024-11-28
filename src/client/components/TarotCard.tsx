@@ -1,18 +1,29 @@
 import { Box, Image } from "@yamada-ui/react";
-import { TarotCardCategory } from "~/db/schema";
+import { Orientation, type TarotCardCategory } from "~/db/schema";
 
 export const TarotCard = ({
   category,
   cardNumber,
+  isReversed,
+  orientation,
 }: {
   category: TarotCardCategory;
   cardNumber: number;
+  isReversed?: boolean;
+  orientation?: Orientation;
 }) => (
-  <Box>
-    <Image
-      src={`/static/cards/goodstudio/${TarotCardCategory.MajorArcana}_${0}.svg`}
-      alt={`${category} ${cardNumber}`}
-      w={100}
-    />
-  </Box>
+  <Image
+    minW={20}
+    maxW={200}
+    borderRadius="6px"
+    src={`/static/cards/goodstudio/${category}_${cardNumber}.jpg`}
+    alt={`${category} ${cardNumber}`}
+    transform={
+      isReversed
+        ? orientation === Orientation.Vertical
+          ? "rotate(180deg)"
+          : "rotate(90deg)"
+        : undefined
+    }
+  />
 );

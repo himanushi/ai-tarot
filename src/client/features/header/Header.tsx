@@ -67,7 +67,7 @@ export const Header = () => {
           />
         </DrawerHeader>
         <DrawerBody>
-          <Menu />
+          <Menu onClose={onClose} />
         </DrawerBody>
       </Drawer>
     </Box>

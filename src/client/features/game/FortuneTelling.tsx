@@ -86,6 +86,36 @@ export const FortuneTelling = () => {
   );
 };
 
+const getSpreadBounds = (
+  positions: {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+    description: string;
+    spreadId: number;
+    drawOrder: number;
+    x: number;
+    y: number;
+    orientation: Orientation;
+    displayName: string;
+  }[],
+) => {
+  const xValues = positions.map((p) => p.x);
+  const yValues = positions.map((p) => p.y);
+  const minX = Math.min(...xValues);
+  const maxX = Math.max(...xValues);
+  const minY = Math.min(...yValues);
+  const maxY = Math.max(...yValues);
+
+  return {
+    minX,
+    maxX,
+    minY,
+    maxY,
+    width: maxX - minX + 1, // 必要な列数
+    height: maxY - minY + 1, // 必要な行数
+  };
+};
 const Spreads = ({ history }: { history: History | undefined }) => {
   const [spread, setSpread] = useState<{
     spread?: {
@@ -151,15 +181,17 @@ const Spreads = ({ history }: { history: History | undefined }) => {
     }
   }, [history]);
 
-  if (!history) {
+  if (!history || !spread.positions) {
     return <></>;
   }
+
+  const bounds = getSpreadBounds(spread.positions);
 
   return (
     <Flex flex={1} direction="column">
       <Heading>スプレッド</Heading>
-      <Grid templateColumns="repeat(10, 1fr)" gap={2}>
-        {spread.positions?.map((position, index) => {
+      <Flex flex={1} direction="column">
+        {spread.positions.map((position, index) => {
           const card = cards.find((c) => c.id === history.dealDeck[index][0]);
 
           if (!card) {
@@ -169,8 +201,8 @@ const Spreads = ({ history }: { history: History | undefined }) => {
           return (
             <GridItem
               key={position.id}
-              gridColumn={position.x + 1}
-              gridRow={position.y + 1}
+              gridColumn={position.x - bounds.minX + 1}
+              gridRow={position.y - bounds.minY + 1}
             >
               <TarotCard
                 category={card?.category}
@@ -182,7 +214,7 @@ const Spreads = ({ history }: { history: History | undefined }) => {
             </GridItem>
           );
         })}
-      </Grid>
+      </Flex>
     </Flex>
   );
 };

@@ -1,5 +1,5 @@
 import { zValidator } from "@hono/zod-validator";
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { createFactory } from "hono/factory";
 import { z } from "zod";
@@ -46,6 +46,23 @@ export const getTarotDrawHistoryApi =
       return c.json({ data: history });
     },
   );
+
+export const getTarotDrawHistoriesApi =
+  createFactory<HonoPropsType>().createHandlers(authMiddleware, async (c) => {
+    const me = c.get("me");
+    if (!me) {
+      return c.json({ error: "Unauthorized" }, 401);
+    }
+
+    const db = drizzle(c.env.DB);
+    const histories = await db
+      .select()
+      .from(tarotDrawHistories)
+      .where(and(eq(tarotDrawHistories.userId, me.id)))
+      .orderBy(asc(tarotDrawHistories.id));
+
+    return c.json({ data: histories });
+  });
 
 export const createTarotDrawHistoryApi =
   createFactory<HonoPropsType>().createHandlers(
@@ -283,7 +300,15 @@ export const fortuneTellingTarotDrawHistoryApi =
         return c.json({ error: "Not found: spreadId" }, 404);
       }
 
-      const cards = await db.select().from(tarotCards);
+      const cards = await db
+        .select()
+        .from(tarotCards)
+        .where(
+          inArray(
+            tarotCards.id,
+            history.dealDeck.map((d) => d[0]),
+          ),
+        );
 
       const spread = await db
         .select()
@@ -304,11 +329,11 @@ export const fortuneTellingTarotDrawHistoryApi =
       const systemPrompt = `あなたはタロット占い師です。以下のスプレッドを考慮して質問に対する回答を200文字程度で返してください。スプレッド配置のx,yは左上が(0,0)です。
         スプレッド: ${spread.name}(${spread.description})
         カード配置: ${positions
-          .map((p) => {
+          .map((p, index) => {
             const currentCard = cards.find(
-              (c) => c.id === history.dealDeck[p.drawOrder][0],
+              (c) => c.id === history.dealDeck[index][0],
             );
-            const orientation = history.dealDeck[p.drawOrder][1];
+            const orientation = history.dealDeck[index][1];
             return `[スプレッド配置番号: ${p.drawOrder + 1}, 配置(x:${p.x}, y:${p.y}), 位置の意味: ${
               p.description
             }], [引いたカード: ${`${categoryNames[currentCard?.category as TarotCardCategory]}の${currentCard?.name}`}(${
