@@ -326,7 +326,7 @@ export const fortuneTellingTarotDrawHistoryApi =
         .where(eq(tarotSpreadPositions.spreadId, history.spreadId))
         .orderBy(asc(tarotSpreadPositions.drawOrder));
 
-      const systemPrompt = `あなたはタロット占い師です。以下のスプレッドを考慮して質問に対する回答を200文字程度で返してください。スプレッド配置のx,yは左上が(0,0)です。
+      const systemPrompt = `あなたはタロット占い師です。以下のスプレッドを考慮して質問に対する回答を300文字程度で返してください。最後は総括もして。タロットカードの説明は不要です。スプレッド配置のx,yは左上が(0,0)です。
         スプレッド: ${spread.name}(${spread.description})
         カード配置: ${positions
           .map((p, index) => {
@@ -337,8 +337,8 @@ export const fortuneTellingTarotDrawHistoryApi =
             return `[スプレッド配置番号: ${p.drawOrder + 1}, 配置(x:${p.x}, y:${p.y}), 位置の意味: ${
               p.description
             }], [引いたカード: ${`${categoryNames[currentCard?.category as TarotCardCategory]}の${currentCard?.name}`}(${
-              orientation ? "正位置" : "逆位置"
-            }), カードの意味: ${orientation ? `正位置では、${currentCard?.uprightMeaning}` : `逆位置では、${currentCard?.reversedMeaning}`}]`;
+              orientation === 0 ? "正位置" : "逆位置"
+            }), カードの意味: ${orientation === 0 ? `正位置では、${currentCard?.uprightMeaning}` : `逆位置では、${currentCard?.reversedMeaning}`}]`;
           })
           .join("\n")}
         `;
