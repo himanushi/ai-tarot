@@ -6,7 +6,9 @@ import { Sidebar } from "~/client/features/sidebar/Sidebar";
 export const HomeLayout = () => (
   <Flex as="main" direction="column">
     <Header />
-    <Sidebar />
-    <Outlet />
+    <Flex as="section" direction="row">
+      <Sidebar />
+      <Outlet />
+    </Flex>
   </Flex>
 );
