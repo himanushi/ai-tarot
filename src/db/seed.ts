@@ -748,7 +748,7 @@ export const seedTarotSpreads: (typeof tarotSpreads.$inferInsert)[] = [
     id: 6,
     name: "ナインカード",
     description:
-      "9枚引きの占い。対象者の深層心、心理状態を表す。左上は建前、右下が本音。",
+      "9枚引きの占い。対象者の深層心、心理状態を表す。左上は意識している建前、右下が無意識の本音。",
   },
 ];
 
