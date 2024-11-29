@@ -39,7 +39,7 @@ export const Shuffle = () => {
           await query.api["tarot-draw-histories"][":id"]["shuffle-deck"].$patch(
             { param: { id: questionId.toString() } },
           );
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          await new Promise((resolve) => setTimeout(resolve, 500));
           notice({ title: "シャッフルしました", status: "success" });
           setIsLoading(false);
         }}

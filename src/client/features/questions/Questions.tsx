@@ -15,7 +15,7 @@ export const Questions = () => {
     query.api["tarot-draw-histories"].$get().then((result) => {
       result.json().then((body) => {
         if ("data" in body) {
-          setQuestions(body.data);
+          setQuestions(body.data.reverse());
         }
       });
     });
@@ -24,7 +24,7 @@ export const Questions = () => {
   return (
     <Flex direction="column" gap="3">
       <Heading>占い履歴</Heading>
-      {questions.reverse().map((question) => (
+      {questions.map((question) => (
         <Button
           key={question.id}
           onClick={() => {

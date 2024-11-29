@@ -11,7 +11,7 @@ import {
   Text,
   useDisclosure,
 } from "@yamada-ui/react";
-import { Orientation, TarotCardCategory } from "~/db/schema";
+import { type Orientation, TarotCardCategory } from "~/db/schema";
 
 type CardType = {
   id: number;
@@ -40,8 +40,6 @@ const categoryNames = {
 
 export const TarotCard = ({
   card,
-  isReversed = false,
-  orientation = Orientation.Vertical,
   ...props
 }: { card: CardType } & TarotCardProps & ImageProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -55,20 +53,10 @@ export const TarotCard = ({
         borderRadius="6px"
         src={src}
         alt={`${card.category} ${card.cardNumber}`}
-        // transform={
-        //   orientation === Orientation.Vertical
-        //     ? isReversed
-        //       ? "rotate(180deg)"
-        //       : undefined
-        //     : isReversed
-        //       ? "rotate(90deg)"
-        //       : "rotate(270deg)"
-        // }
         {...props}
       />
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
         <ModalHeader>{categoryNames[card.category]}</ModalHeader>
-
         <ModalBody
           display="flex"
           flexDirection="column"
@@ -82,6 +70,9 @@ export const TarotCard = ({
             maxW={200}
           />
           <Text>{card.name}</Text>
+          <Text>{card.description}</Text>
+          <Text>{`正位置 : ${card.uprightMeaning}`}</Text>
+          <Text>{`逆位置 : ${card.reversedMeaning}`}</Text>
         </ModalBody>
 
         <ModalFooter>

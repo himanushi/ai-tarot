@@ -239,18 +239,6 @@ const Spreads = ({ history }: { history: History | undefined }) => {
               }
             >
               <TarotCard w="100%" maxW={150} card={card} />
-              {/* <Text fontSize={10}>
-                {position.orientation === Orientation.Vertical ? (
-                  position.displayName
-                ) : (
-                  <br />
-                )}
-              </Text>
-              <Text fontSize={10}>
-                {position.orientation === Orientation.Horizontal
-                  ? position.displayName
-                  : ""}
-              </Text> */}
             </GridItem>
           );
         })}
