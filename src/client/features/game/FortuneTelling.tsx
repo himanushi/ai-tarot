@@ -199,7 +199,7 @@ const Spreads = ({ history }: { history: History | undefined }) => {
       <Grid
         templateColumns={`repeat(${bounds.width}, minmax(0, 1fr))`}
         templateRows={`repeat(${bounds.height}, auto)`}
-        gap="10px"
+        gap="12"
         maxWidth="90vw"
         maxHeight="90vh"
         width="100%"
@@ -218,6 +218,7 @@ const Spreads = ({ history }: { history: History | undefined }) => {
               key={position.id}
               colStart={position.x - bounds.minX + 1}
               rowStart={position.y - bounds.minY + 1}
+              position="relative"
             >
               <TarotCard
                 w="100%"
@@ -227,6 +228,17 @@ const Spreads = ({ history }: { history: History | undefined }) => {
                 orientation={position.orientation}
                 isReversed={history.dealDeck[index][1] === 0}
               />
+              {/* <TarotCard
+                w="100%"
+                maxW={200}
+                category={card.category}
+                cardNumber={card.cardNumber}
+                orientation={Orientation.Horizontal}
+                isReversed={history.dealDeck[index][1] === 0}
+                position="absolute"
+                top={0}
+                left={0}
+              /> */}
             </GridItem>
           );
         })}
