@@ -1,6 +1,10 @@
 import {
+  Bleed,
   Box,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
   Center,
   Flex,
   Grid,
@@ -15,7 +19,7 @@ import { Fragment, useCallback, useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { TarotCard } from "~/client/components/TarotCard";
 import { clientUrl } from "~/client/utils/clientUrl";
-import type { Orientation, TarotCardCategory } from "~/db/schema";
+import { Orientation, type TarotCardCategory } from "~/db/schema";
 import type {
   TarotCardsApi,
   TarotDrawHistoryApi,
@@ -62,8 +66,7 @@ export const FortuneTelling = () => {
   }, [load]);
 
   return (
-    <Flex direction="column" h="calc(100dvh - 4rem)">
-      <Spreads history={history} />
+    <Flex direction="column">
       <Button
         disabled={isLoading}
         isLoading={isLoading}
@@ -80,8 +83,15 @@ export const FortuneTelling = () => {
       >
         占う
       </Button>
-      <Text>{history?.question}</Text>
-      <Text>{history?.readingResult}</Text>
+      <Card>
+        <CardHeader>
+          <Text>{history?.question}</Text>
+        </CardHeader>
+        <CardBody>
+          <Text>{history?.readingResult}</Text>
+        </CardBody>
+      </Card>
+      <Spreads history={history} />
     </Flex>
   );
 };
@@ -189,22 +199,18 @@ const Spreads = ({ history }: { history: History | undefined }) => {
   const bounds = getSpreadBounds(spread.positions);
 
   return (
-    <Flex
-      flex={1}
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-    >
+    <Flex direction="column" alignItems="center" justifyContent="center">
       <Heading>スプレッド</Heading>
       <Grid
         templateColumns={`repeat(${bounds.width}, minmax(0, 1fr))`}
         templateRows={`repeat(${bounds.height}, auto)`}
-        gap="12"
         maxWidth="90vw"
         maxHeight="90vh"
-        width="100%"
         height="auto"
-        padding="20px"
+        padding="30px"
+        objectFit="contain"
+        gapX="15%"
+        gapY="1%"
       >
         {spread.positions.map((position, index) => {
           const card = cards.find((c) => c.id === history.dealDeck[index][0]);
@@ -213,32 +219,38 @@ const Spreads = ({ history }: { history: History | undefined }) => {
             return <Fragment key={position.id} />;
           }
 
+          const isReversed = history.dealDeck[index][1] === 1;
+
           return (
             <GridItem
               key={position.id}
               colStart={position.x - bounds.minX + 1}
               rowStart={position.y - bounds.minY + 1}
+              padding=""
               position="relative"
+              transform={
+                position.orientation === Orientation.Vertical
+                  ? isReversed
+                    ? "rotate(180deg)"
+                    : undefined
+                  : isReversed
+                    ? "rotate(90deg)"
+                    : "rotate(270deg)"
+              }
             >
-              <TarotCard
-                w="100%"
-                maxW={200}
-                category={card.category}
-                cardNumber={card.cardNumber}
-                orientation={position.orientation}
-                isReversed={history.dealDeck[index][1] === 0}
-              />
-              {/* <TarotCard
-                w="100%"
-                maxW={200}
-                category={card.category}
-                cardNumber={card.cardNumber}
-                orientation={Orientation.Horizontal}
-                isReversed={history.dealDeck[index][1] === 0}
-                position="absolute"
-                top={0}
-                left={0}
-              /> */}
+              <TarotCard w="100%" maxW={150} card={card} />
+              {/* <Text fontSize={10}>
+                {position.orientation === Orientation.Vertical ? (
+                  position.displayName
+                ) : (
+                  <br />
+                )}
+              </Text>
+              <Text fontSize={10}>
+                {position.orientation === Orientation.Horizontal
+                  ? position.displayName
+                  : ""}
+              </Text> */}
             </GridItem>
           );
         })}
