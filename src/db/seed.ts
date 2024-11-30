@@ -750,6 +750,11 @@ export const seedTarotSpreads: (typeof tarotSpreads.$inferInsert)[] = [
     description:
       "9枚引きの占い。対象者の深層心、心理状態を表す。左上は意識している建前、右下が無意識の本音。",
   },
+  {
+    id: 7,
+    name: "ヘキサグラム",
+    description: "7枚引きの占い。多くの問題に対応可能。恋愛、問題解決など。",
+  },
 ];
 
 export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert)[] =
@@ -1021,5 +1026,69 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       y: 2,
       description: "潜在意識の中の潜在意識",
       displayName: "潜在意識の中の潜在意識",
+    },
+    // ヘキサグラム
+    {
+      id: 30,
+      spreadId: 7,
+      drawOrder: 0,
+      x: 1,
+      y: 0,
+      description: "過去",
+      displayName: "過去",
+    },
+    {
+      id: 31,
+      spreadId: 7,
+      drawOrder: 1,
+      x: 2,
+      y: 3,
+      description: "現在",
+      displayName: "現在",
+    },
+    {
+      id: 32,
+      spreadId: 7,
+      drawOrder: 2,
+      x: 0,
+      y: 3,
+      description: "近い将来",
+      displayName: "近い将来",
+    },
+    {
+      id: 33,
+      spreadId: 7,
+      drawOrder: 3,
+      x: 1,
+      y: 4,
+      description: "対策",
+      displayName: "対策",
+    },
+    {
+      id: 34,
+      spreadId: 7,
+      drawOrder: 4,
+      x: 0,
+      y: 1,
+      description: "対策",
+      displayName: "対策",
+    },
+    {
+      id: 35,
+      spreadId: 7,
+      drawOrder: 5,
+      x: 2,
+      y: 1,
+      description: "願望",
+      displayName: "願望",
+    },
+    {
+      id: 36,
+      spreadId: 7,
+      drawOrder: 6,
+      x: 1,
+      y: 2,
+      description: "最終結果",
+      displayName: "最終結果",
     },
   ];
