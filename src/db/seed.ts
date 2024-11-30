@@ -725,7 +725,8 @@ export const seedTarotSpreads: (typeof tarotSpreads.$inferInsert)[] = [
   {
     id: 2,
     name: "ツーオラクル",
-    description: "2枚引きの占い。選択肢の二者択一。",
+    description:
+      "2枚引きの占い。アドバイスと結果を表す。または選択肢の二者択一。",
   },
   {
     id: 3,
@@ -776,7 +777,7 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 0,
       x: 0,
       y: 0,
-      description: "選択肢1、アドバイス",
+      description: "選択肢1またはアドバイス",
       displayName: "選択肢1またはアドバイス",
     },
     {
@@ -785,7 +786,7 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 1,
       x: 1,
       y: 0,
-      description: "選択肢2、結果",
+      description: "選択肢2または結果",
       displayName: "選択肢2または結果",
     },
     // スリーオラクル
@@ -795,7 +796,7 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 0,
       x: 0,
       y: 0,
-      description: "選択肢1、過去",
+      description: "選択肢1または過去",
       displayName: "選択肢1または過去",
     },
     {
@@ -804,7 +805,7 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 1,
       x: 1,
       y: 0,
-      description: "選択肢2、現在",
+      description: "選択肢2または現在",
       displayName: "選択肢2または現在",
     },
     {
@@ -813,7 +814,7 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 2,
       x: 2,
       y: 0,
-      description: "選択肢3、未来",
+      description: "選択肢3または未来",
       displayName: "選択肢3または未来",
     },
     // フォーオラクル
@@ -823,7 +824,7 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 0,
       x: 0,
       y: 0,
-      description: "選択肢1、過去",
+      description: "選択肢1または過去",
       displayName: "選択肢1または過去",
     },
     {
@@ -832,7 +833,7 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 1,
       x: 1,
       y: 0,
-      description: "選択肢2、現在",
+      description: "選択肢2または現在",
       displayName: "選択肢2または現在",
     },
     {
@@ -841,7 +842,7 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 2,
       x: 2,
       y: 0,
-      description: "選択肢3、未来",
+      description: "選択肢3または未来",
       displayName: "選択肢3または未来",
     },
     {
@@ -850,8 +851,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 3,
       x: 3,
       y: 0,
-      description: "選択肢4、アドバイス",
-      displayName: "選択肢4、アドバイス",
+      description: "選択肢4またはアドバイス",
+      displayName: "選択肢4またはアドバイス",
     },
     // ケルト十字
     {
