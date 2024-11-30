@@ -326,7 +326,7 @@ export const fortuneTellingTarotDrawHistoryApi =
         .where(eq(tarotSpreadPositions.spreadId, history.spreadId))
         .orderBy(asc(tarotSpreadPositions.drawOrder));
 
-      const systemPrompt = `あなたはタロット占い師です。以下のスプレッドを考慮して質問に対する回答を300文字程度で返してください。最後は総括もして。タロットカードの説明は不要です。スプレッド配置のx,yは左上が(0,0)です。
+      const systemPrompt = `あなたはタロット占い師です。以下のスプレッドを考慮して質問に対する回答を300文字程度で返してください。問題点、解決策をわかりやすく。最後は総括もすること。カードの説明は絶対にしないでください。スプレッド配置のx,yは左上が(0,0)です。
         スプレッド: ${spread.name}(${spread.description})
         カード配置: ${positions
           .map((p, index) => {
