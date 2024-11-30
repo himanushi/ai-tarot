@@ -127,6 +127,11 @@ const getSpreadBounds = (
   };
 };
 
+const getFractionalTranslate = (value: number): string => {
+  const fractionalPart = value % 1;
+  return `${fractionalPart * 100}%`;
+};
+
 const Spreads = ({ history }: { history: History | undefined }) => {
   const [spread, setSpread] = useState<{
     spread?: {
@@ -220,23 +225,24 @@ const Spreads = ({ history }: { history: History | undefined }) => {
           }
 
           const isReversed = history.dealDeck[index][1] === 1;
+          const translateX = getFractionalTranslate(position.x);
+          const translateY = getFractionalTranslate(position.y);
+          const rotate =
+            position.orientation === Orientation.Vertical
+              ? isReversed
+                ? "rotate(180deg)"
+                : ""
+              : isReversed
+                ? "rotate(90deg)"
+                : "rotate(270deg)";
 
           return (
             <GridItem
               key={position.id}
-              colStart={position.x - bounds.minX + 1}
-              rowStart={position.y - bounds.minY + 1}
-              padding=""
+              colStart={Math.floor(position.x) - bounds.minX + 1}
+              rowStart={Math.floor(position.y) - bounds.minY + 1}
               position="relative"
-              transform={
-                position.orientation === Orientation.Vertical
-                  ? isReversed
-                    ? "rotate(180deg)"
-                    : undefined
-                  : isReversed
-                    ? "rotate(90deg)"
-                    : "rotate(270deg)"
-              }
+              transform={`translate(${translateX}, ${translateY}) ${rotate}`}
             >
               <TarotCard w="100%" maxW={150} card={card} />
             </GridItem>
