@@ -23,8 +23,6 @@ export const Header = () => {
         <Spacer />
         {!isOpen ? (
           <IconButton
-            variant="ghost"
-            aria-label="Open navigation menu"
             color="muted"
             display={{ base: "none", lg: "inline-flex" }}
             icon={<MenuIcon fontSize="2xl" />}
