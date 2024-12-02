@@ -1,22 +1,17 @@
 import {
-  Bleed,
-  Box,
   Button,
   Card,
   CardBody,
   CardHeader,
-  Center,
   Flex,
   Grid,
   GridItem,
   Heading,
-  Spacer,
   Text,
 } from "@yamada-ui/react";
 import { hc } from "hono/client";
-import { use } from "hono/jsx";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { TarotCard } from "~/client/components/TarotCard";
 import { clientUrl } from "~/client/utils/clientUrl";
 import { Orientation, type TarotCardCategory } from "~/db/schema";
@@ -45,11 +40,43 @@ type History = {
   isArchived: boolean;
 };
 
+type CardType = {
+  id: number;
+  name: string;
+  category: TarotCardCategory;
+  cardNumber: number;
+  description: string;
+  uprightMeaning: string;
+  reversedMeaning: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type Spread = {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  description: string;
+};
+
+type Position = {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  description: string;
+  spreadId: number;
+  drawOrder: number;
+  x: number;
+  y: number;
+  orientation: Orientation;
+  displayName: string;
+};
+
 export const FortuneTelling = () => {
   const { questionId } = useLoaderData() as { questionId: number };
   const [history, setHistory] = useState<History>();
   const [isLoading, setIsLoading] = useState(false);
-  const nav = useNavigate();
 
   const load = useCallback(async () => {
     const result = await query.api["tarot-draw-histories"][":id"].$get({
@@ -96,20 +123,7 @@ export const FortuneTelling = () => {
   );
 };
 
-const getSpreadBounds = (
-  positions: {
-    id: number;
-    createdAt: string;
-    updatedAt: string;
-    description: string;
-    spreadId: number;
-    drawOrder: number;
-    x: number;
-    y: number;
-    orientation: Orientation;
-    displayName: string;
-  }[],
-) => {
+const getSpreadBounds = (positions: Position[]) => {
   const xValues = positions.map((p) => p.x);
   const yValues = positions.map((p) => p.y);
   const minX = Math.min(...xValues);
@@ -134,40 +148,11 @@ const getFractionalTranslate = (value: number): string => {
 
 const Spreads = ({ history }: { history: History | undefined }) => {
   const [spread, setSpread] = useState<{
-    spread?: {
-      id: number;
-      name: string;
-      createdAt: string;
-      updatedAt: string;
-      description: string;
-    };
-    positions?: {
-      id: number;
-      createdAt: string;
-      updatedAt: string;
-      description: string;
-      spreadId: number;
-      drawOrder: number;
-      x: number;
-      y: number;
-      orientation: Orientation;
-      displayName: string;
-    }[];
+    spread?: Spread;
+    positions?: Position[];
   }>({});
 
-  const [cards, setCards] = useState<
-    {
-      id: number;
-      name: string;
-      category: TarotCardCategory;
-      cardNumber: number;
-      description: string;
-      uprightMeaning: string;
-      reversedMeaning: string;
-      createdAt: string;
-      updatedAt: string;
-    }[]
-  >([]);
+  const [cards, setCards] = useState<CardType[]>([]);
 
   useEffect(() => {
     if (history?.spreadId) {
@@ -217,38 +202,90 @@ const Spreads = ({ history }: { history: History | undefined }) => {
         gapX="15%"
         gapY="1%"
       >
-        {spread.positions.map((position, index) => {
-          const card = cards.find((c) => c.id === history.dealDeck[index][0]);
-
-          if (!card) {
-            return <Fragment key={position.id} />;
-          }
-
-          const isReversed = history.dealDeck[index][1] === 1;
-          const translateX = getFractionalTranslate(position.x);
-          const translateY = getFractionalTranslate(position.y);
-          const rotate =
-            position.orientation === Orientation.Vertical
-              ? isReversed
-                ? "rotate(180deg)"
-                : ""
-              : isReversed
-                ? "rotate(90deg)"
-                : "rotate(270deg)";
-
-          return (
-            <GridItem
-              key={position.id}
-              colStart={Math.floor(position.x) - bounds.minX + 1}
-              rowStart={Math.floor(position.y) - bounds.minY + 1}
-              position="relative"
-              transform={`translate(${translateX}, ${translateY}) ${rotate}`}
-            >
-              <TarotCard w="100%" maxW={150} card={card} />
-            </GridItem>
-          );
-        })}
+        {spread.positions.map((position, index) => (
+          <SpreadItem
+            key={position.id}
+            cards={cards}
+            history={history}
+            position={position}
+            index={index}
+            bounds={bounds}
+          />
+        ))}
       </Grid>
     </Flex>
+  );
+};
+
+const SpreadItem = ({
+  cards,
+  history,
+  position,
+  index,
+  bounds,
+}: {
+  cards: CardType[];
+  history: History;
+  position: Position;
+  index: number;
+  bounds: {
+    minX: number;
+    maxX: number;
+    minY: number;
+    maxY: number;
+    width: number;
+    height: number;
+  };
+}) => {
+  const card = cards.find((c) => c.id === history.dealDeck[index][0]);
+
+  if (!card) {
+    return <Fragment key={position.id} />;
+  }
+
+  const isReversed = history.dealDeck[index][1] === 1;
+  const translateX = getFractionalTranslate(position.x);
+  const translateY = getFractionalTranslate(position.y);
+  const rotate =
+    position.orientation === Orientation.Vertical
+      ? isReversed
+        ? "rotate(180deg)"
+        : ""
+      : isReversed
+        ? "rotate(90deg)"
+        : "rotate(270deg)";
+  const textRotate =
+    position.orientation === Orientation.Vertical
+      ? isReversed
+        ? "rotate(180deg)"
+        : ""
+      : isReversed
+        ? "rotate(90deg)"
+        : "rotate(270deg)";
+
+  return (
+    <GridItem
+      key={position.id}
+      colStart={Math.floor(position.x) - bounds.minX + 1}
+      rowStart={Math.floor(position.y) - bounds.minY + 1}
+      position="relative"
+    >
+      <TarotCard
+        w="100%"
+        maxW={150}
+        card={card}
+        transform={`translate(${translateX}, ${translateY}) ${rotate}`}
+        zIndex={1}
+        position="relative"
+      />
+      <Text
+        fontSize="xs"
+        zIndex={2}
+        position="absolute"
+        transform={`translate(${translateX}, ${translateY}) ${rotate}`}
+      >
+        {position.displayName}
+      </Text>
+    </GridItem>
   );
 };
