@@ -28,6 +28,7 @@ type CardType = {
 type TarotCardProps = {
   isReversed?: boolean;
   orientation?: Orientation;
+  description?: string;
 };
 
 const categoryNames = {
@@ -40,6 +41,7 @@ const categoryNames = {
 
 export const TarotCard = ({
   card,
+  description,
   ...props
 }: { card: CardType } & TarotCardProps & ImageProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -56,7 +58,7 @@ export const TarotCard = ({
         {...props}
       />
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
-        <ModalHeader>{categoryNames[card.category]}</ModalHeader>
+        <ModalHeader>{description}</ModalHeader>
         <ModalBody
           display="flex"
           flexDirection="column"
@@ -69,7 +71,7 @@ export const TarotCard = ({
             borderRadius="6px"
             maxW={200}
           />
-          <Text>{card.name}</Text>
+          <Text>{`[${categoryNames[card.category]}] ${card.name}`}</Text>
           <Text>{card.description}</Text>
           <Text>{`正位置 : ${card.uprightMeaning}`}</Text>
           <Text>{`逆位置 : ${card.reversedMeaning}`}</Text>
