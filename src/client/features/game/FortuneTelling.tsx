@@ -10,7 +10,7 @@ import {
   Text,
 } from "@yamada-ui/react";
 import { hc } from "hono/client";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { TarotCard } from "~/client/components/TarotCard";
 import { clientUrl } from "~/client/utils/clientUrl";
@@ -141,9 +141,9 @@ const getSpreadBounds = (positions: Position[]) => {
   };
 };
 
-const getFractionalTranslate = (value: number): string => {
+const getFractionalTranslate = (value: number): number => {
   const fractionalPart = value % 1;
-  return `${fractionalPart * 100}%`;
+  return fractionalPart * 100;
 };
 
 const Spreads = ({ history }: { history: History | undefined }) => {
@@ -200,7 +200,7 @@ const Spreads = ({ history }: { history: History | undefined }) => {
         padding="30px"
         objectFit="contain"
         gapX="15%"
-        gapY="1%"
+        gapY="2%"
       >
         {spread.positions.map((position, index) => (
           <SpreadItem
@@ -238,11 +238,6 @@ const SpreadItem = ({
   };
 }) => {
   const card = cards.find((c) => c.id === history.dealDeck[index][0]);
-
-  if (!card) {
-    return <Fragment key={position.id} />;
-  }
-
   const isReversed = history.dealDeck[index][1] === 1;
   const translateX = getFractionalTranslate(position.x);
   const translateY = getFractionalTranslate(position.y);
@@ -254,14 +249,10 @@ const SpreadItem = ({
       : isReversed
         ? "rotate(90deg)"
         : "rotate(270deg)";
-  const textRotate =
-    position.orientation === Orientation.Vertical
-      ? isReversed
-        ? "rotate(180deg)"
-        : ""
-      : isReversed
-        ? "rotate(90deg)"
-        : "rotate(270deg)";
+
+  if (!card) {
+    return <Fragment key={position.id} />;
+  }
 
   return (
     <GridItem
@@ -274,18 +265,11 @@ const SpreadItem = ({
         w="100%"
         maxW={150}
         card={card}
-        transform={`translate(${translateX}, ${translateY}) ${rotate}`}
+        transform={`translate(${translateX}%, ${translateY}%) ${rotate}`}
         zIndex={1}
         position="relative"
+        description={`位置意味: ${position.displayName}`}
       />
-      <Text
-        fontSize="xs"
-        zIndex={2}
-        position="absolute"
-        transform={`translate(${translateX}, ${translateY}) ${rotate}`}
-      >
-        {position.displayName}
-      </Text>
     </GridItem>
   );
 };
