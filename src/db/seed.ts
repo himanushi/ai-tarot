@@ -758,9 +758,9 @@ export const seedTarotSpreads: (typeof tarotSpreads.$inferInsert)[] = [
   },
   {
     id: 8,
-    name: "ファランクス",
+    name: "ファランクス(競馬)",
     description:
-      "16枚引きの占い。1列ごと、恋愛運、仕事運、社会運、健康運があり、1行ごとに現在、一年後、三年後、五年後と多くの問題に対応可能。16択も可能。",
+      "16枚引きの占い。1レースで16頭の予想をする競馬占い。各カードが馬に対応。",
   },
 ];
 
@@ -1098,15 +1098,15 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       description: "最終結果",
       displayName: "最終結果",
     },
-    // ファランクス
+    // ファランクス(競馬)
     {
       id: 37,
       spreadId: 8,
       drawOrder: 0,
       x: 3,
       y: 0,
-      description: "現在の恋愛運または選択肢1",
-      displayName: "現在の恋愛運または選択肢1",
+      description: "選択肢1",
+      displayName: "選択肢1",
     },
     {
       id: 38,
@@ -1114,8 +1114,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 1,
       x: 2,
       y: 0,
-      description: "現在の仕事運または選択肢2",
-      displayName: "現在の仕事運または選択肢2",
+      description: "選択肢2",
+      displayName: "選択肢2",
     },
     {
       id: 39,
@@ -1123,8 +1123,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 2,
       x: 1,
       y: 0,
-      description: "現在の社会運または選択肢3",
-      displayName: "現在の社会運または選択肢3",
+      description: "選択肢3",
+      displayName: "選択肢3",
     },
     {
       id: 40,
@@ -1132,8 +1132,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 3,
       x: 0,
       y: 0,
-      description: "現在の健康運または選択肢4",
-      displayName: "現在の健康運または選択肢4",
+      description: "選択肢4",
+      displayName: "選択肢4",
     },
     {
       id: 41,
@@ -1141,8 +1141,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 4,
       x: 3,
       y: 1,
-      description: "一年後の恋愛運または選択肢5",
-      displayName: "一年後の恋愛運または選択肢5",
+      description: "選択肢5",
+      displayName: "選択肢5",
     },
     {
       id: 42,
@@ -1150,8 +1150,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 5,
       x: 2,
       y: 1,
-      description: "一年後の仕事運または選択肢6",
-      displayName: "一年後の仕事運または選択肢6",
+      description: "選択肢6",
+      displayName: "選択肢6",
     },
     {
       id: 43,
@@ -1159,8 +1159,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 6,
       x: 1,
       y: 1,
-      description: "一年後の社会運または選択肢7",
-      displayName: "一年後の社会運または選択肢7",
+      description: "選択肢7",
+      displayName: "選択肢7",
     },
     {
       id: 44,
@@ -1168,8 +1168,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 7,
       x: 0,
       y: 1,
-      description: "一年後の健康運または選択肢8",
-      displayName: "一年後の健康運または選択肢8",
+      description: "選択肢8",
+      displayName: "選択肢8",
     },
     {
       id: 45,
@@ -1177,8 +1177,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 8,
       x: 3,
       y: 2,
-      description: "三年後の恋愛運または選択肢9",
-      displayName: "三年後の恋愛運または選択肢9",
+      description: "選択肢9",
+      displayName: "選択肢9",
     },
     {
       id: 46,
@@ -1186,8 +1186,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 9,
       x: 2,
       y: 2,
-      description: "三年後の仕事運または選択肢10",
-      displayName: "三年後の仕事運または選択肢10",
+      description: "選択肢10",
+      displayName: "選択肢10",
     },
     {
       id: 47,
@@ -1195,8 +1195,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 10,
       x: 1,
       y: 2,
-      description: "三年後の社会運または選択肢11",
-      displayName: "三年後の社会運または選択肢11",
+      description: "選択肢11",
+      displayName: "選択肢11",
     },
     {
       id: 48,
@@ -1204,8 +1204,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 11,
       x: 0,
       y: 2,
-      description: "三年後の健康運または選択肢12",
-      displayName: "三年後の健康運または選択肢12",
+      description: "選択肢12",
+      displayName: "選択肢12",
     },
     {
       id: 49,
@@ -1213,8 +1213,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 12,
       x: 3,
       y: 3,
-      description: "五年後の恋愛運または選択肢13",
-      displayName: "五年後の恋愛運または選択肢13",
+      description: "選択肢13",
+      displayName: "選択肢13",
     },
     {
       id: 50,
@@ -1222,8 +1222,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 13,
       x: 2,
       y: 3,
-      description: "五年後の仕事運または選択肢14",
-      displayName: "五年後の仕事運または選択肢14",
+      description: "選択肢14",
+      displayName: "選択肢14",
     },
     {
       id: 51,
@@ -1231,8 +1231,8 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 14,
       x: 1,
       y: 3,
-      description: "五年後の社会運または選択肢15",
-      displayName: "五年後の社会運または選択肢15",
+      description: "選択肢15",
+      displayName: "選択肢15",
     },
     {
       id: 52,
@@ -1240,7 +1240,7 @@ export const seedTarotSpreadPositions: (typeof tarotSpreadPositions.$inferInsert
       drawOrder: 15,
       x: 0,
       y: 3,
-      description: "五年後の健康運または選択肢16",
-      displayName: "五年後の健康運または選択肢16",
+      description: "選択肢16",
+      displayName: "選択肢16",
     },
   ];
