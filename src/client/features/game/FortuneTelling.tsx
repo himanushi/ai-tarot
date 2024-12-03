@@ -199,7 +199,7 @@ const Spreads = ({ history }: { history: History | undefined }) => {
         height="auto"
         padding="30px"
         objectFit="contain"
-        gapX="15%"
+        gapX="2%"
         gapY="2%"
       >
         {spread.positions.map((position, index) => (
