@@ -10,14 +10,13 @@ import {
 import { authMiddleware } from "../utils/authMiddleware";
 import type { HonoPropsType } from "../utils/createApp";
 
-const insertOrUpdate = async (
+const insertOrUpdateBatch = async (
   db: DrizzleD1Database<Record<string, never>>,
   table: any,
   data: any[],
 ) => {
   const columns = Object.keys(getTableColumns(table));
-
-  for (const record of data) {
+  const queries = data.map((record) => {
     const setValues = columns.reduce(
       (acc, column) => {
         if (column !== "id") {
@@ -28,14 +27,16 @@ const insertOrUpdate = async (
       {} as Record<string, any>,
     );
 
-    await db
+    return db
       .insert(table)
       .values(record)
       .onConflictDoUpdate({
         target: [table.id],
         set: setValues,
       });
-  }
+  });
+
+  await db.batch(queries as any);
 };
 
 export const insertSeedApi = createFactory<HonoPropsType>().createHandlers(
@@ -47,9 +48,13 @@ export const insertSeedApi = createFactory<HonoPropsType>().createHandlers(
     }
 
     const db = drizzle(c.env.DB);
-    await insertOrUpdate(db, tarotCards, seedTarotCards);
-    await insertOrUpdate(db, tarotSpreads, seedTarotSpreads);
-    await insertOrUpdate(db, tarotSpreadPositions, seedTarotSpreadPositions);
+    await insertOrUpdateBatch(db, tarotCards, seedTarotCards);
+    await insertOrUpdateBatch(db, tarotSpreads, seedTarotSpreads);
+    await insertOrUpdateBatch(
+      db,
+      tarotSpreadPositions,
+      seedTarotSpreadPositions,
+    );
 
     return c.json({ data: "ok" });
   },
