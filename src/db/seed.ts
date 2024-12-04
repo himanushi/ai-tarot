@@ -758,9 +758,8 @@ export const seedTarotSpreads: (typeof tarotSpreads.$inferInsert)[] = [
   },
   {
     id: 8,
-    name: "ファランクス(競馬)",
-    description:
-      "16枚引きの占い。1レースで16頭の予想をする競馬占い。各カードが馬に対応。",
+    name: "ファランクス",
+    description: "16枚引きの占い。1レースで16頭の予想をする競馬占い。",
   },
   {
     id: 9,
